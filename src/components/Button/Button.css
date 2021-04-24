@@ -11,9 +11,19 @@
     position:absolute;
         right:0;
         top:13px;
-    margin-top:5px;
+    margin-top:7px;
     margin-right:25px;
     border-radius: 3px;
+}
+.searchBar{
+    outline: none;
+    border:none;
+    position:absolute;
+        right:0;
+        top:20px;
+    margin-top:5px;
+    margin-right:700px;
+    width:250px;
 }
 .btn2 {
     padding:8px 20px;
@@ -24,12 +34,20 @@
     position:absolute;
         right:0;
         top:13px;
-    margin-top:5px;
-    margin-right:220px;
+    margin-top:7px;
+    margin-right:200px;
     border-radius: 3px;
 }
-.Avatar{
-   
+
+.Message{
+    padding:8px 20px;
+    position:absolute;
+        right:0;
+        top:13px;
+    margin-top:7px;
+    margin-right:390px;
+    font-size: 27px;
+    color: black;
 
 }
 .btn--outline1{
@@ -51,7 +69,7 @@
 
 .btn--medium {
     padding:8px 20px;
-    font-size:20px;
+    font-size:16px;
 }
 
 .btn--large{

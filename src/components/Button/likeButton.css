@@ -1,0 +1,9 @@
+.likeBtn{
+    height: 35px;
+    width: 100px;
+    padding: 0 30px;
+    font-size: 11px;
+    background-color: transparent;
+    border-radius: 10px;
+    border-color: #52c41a;
+}

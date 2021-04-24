@@ -41,7 +41,7 @@ function Footer() {
               VmedicTn
             </Link>
           </div>
-          <small class='website-rights'>VmedicTn © 2021</small>
+         
           <div class='social-icons'>
             <Link
               class='social-icon-link facebook'

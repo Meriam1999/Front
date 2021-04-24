@@ -1,15 +1,16 @@
 import React from "react";
-
+import './styling.css';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Profile from "./profile";
+import PubCard from '../AnnonceItems/pubCards';
 import AnnonceItem from '../AnnonceItems/AnnonceItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh"
+    height: "auto"
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -27,25 +28,10 @@ const useStyles = makeStyles((theme) => ({
   heroButtons: {
     marginTop: theme.spacing(4)
   },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8)
-  },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column"
-  },
-  cardMedia: {
-    paddingTop: "56.25%" // 16:9
-  },
-  cardContent: {
-    flexGrow: 1
-  },
+
 
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function Login() {
   const classes = useStyles();
@@ -59,9 +45,33 @@ export default function Login() {
             <Profile />
           </div>
         </Grid>
-        <Grid>
-        <AnnonceItem />
+        <Grid style={{display:"flex", flexDirection:"row", position:"relative" , margin:"50px 0 45px" ,justifyContent: "right"}} >
+                         <AnnonceItem
+                        src='assets/images/medi.jpg' 
+                        title='medicaments '
+                        label='Medicament'
+                        desc=' cest la description'
+                        username='nada'
+                        />
+                        <AnnonceItem
+                        src='assets/images/lit.jpg' 
+                        title='ortho'
+                        label='Medicament'
+                        desc=' cest la description'
+                        username='nada'
+                        />
+                        <AnnonceItem
+                        src='assets/images/chaiseroulante.jpg' 
+                        title='ortho'
+                        desc=' cest la description'
+                        label='Medicament'
+                        username='nada'
+                        />
         </Grid>
+        <Grid style={{display:"flex", flexDirection:"row", position:"relative" , margin:"50px 0 45px" ,justifyContent: "right"}} >
+         
+        </Grid>
+      
       </Grid>
     </React.Fragment>
   );

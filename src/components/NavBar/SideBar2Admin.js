@@ -3,15 +3,13 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import { SidebarData } from './SidebarData2';
+import { SidebarData } from './SidebarData2Admin';
 import SubMenu from './SubMenu';
-import { MessageTwoTone  } from '@ant-design/icons';
-import ForumOutlinedIcon from '@material-ui/icons/ForumOutlined';
 import { IconContext } from 'react-icons/lib';
-import { Button } from '../Button/Button';
-import {Button2} from '../Button/Button2';
 import 'antd/dist/antd.css';
-import { Input } from 'antd';
+import { Input,Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+
 
 
 import '../Button/Button.css';
@@ -37,7 +35,7 @@ const NavIcon = styled(Link)`
 
 const SidebarNav = styled.nav`
   background:  #0086b3;
-  width: 250px;
+  width: 300px;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -70,31 +68,35 @@ const Sidebar = () => {
     };
   
     window.addEventListener('resize',showButton);
-    const { Search } = Input;
-    const onSearch = value => console.log(value);
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
         <Nav>
-          <ul style={{display:"inline-block"}}>
-           <li>{button && <Button /*onClick={()=>{setButton(false)}}*/ buttonStyle='btn--outline'> Connectez-vous </Button>}</li>
-           <li>{button && <Button2  /*onClick={()=>{setButton(false)}}*/ buttonStyle='btn--outline'> Publier une Annonce </Button2>}</li>
-           <li> <Link to="/Chat"><MessageTwoTone className="Message" /></Link></li>
-           <li><Search className="searchBar"placeholder="input search text" onSearch={onSearch} style={{ width:"240px",borderRadius:"4px" }} /> </li>
-         </ul>
-
+        <ul style={{display:"inline-block"}}>
+        
+       <li> <Link ><Avatar size="large" icon={<UserOutlined />} style={{
+        color: '#2eb82e',
+        backgroundColor: " #c2f0c2",
+        position:"absolute",
+        right:"20px",
+        top:"20px",
+      }}
+    >
+     
+    </Avatar> </Link></li>
+        </ul>
           <NavIcon to='#'>
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
-
-          <Link to="/"><span className="EmedTn"> <b>VmedicTn</b> <img style={{width:"90px",height:"90px",paddingRight:"40px"}} src="./logo.png" /></span></Link>
-       
+          <span className="EmedTn"> <b>VmedicTn</b></span>
         </Nav>
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
             <NavIcon to='#'>
               <AiIcons.AiOutlineClose onClick={showSidebar} />
             </NavIcon>
+            <span className="EmedTn"> <b>VmedicTn</b></span>
             {SidebarData.map((item, index) => {
               return <SubMenu item={item} key={index} />;
             })}

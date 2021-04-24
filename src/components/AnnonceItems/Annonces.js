@@ -18,19 +18,31 @@ function Annonces() {
                     {/* ce Code est statique , il faut le changer avec la base de donne  */}
                         <AnnoncesItem
                         src='assets/images/medi.jpg' 
-                        text='medicaments '
+                        title='medicaments '
                         label='Medicament'
-                        path='/details'/>
+                        desc=' cest la description cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Ariana'
+                        />
                         <AnnoncesItem
                         src='assets/images/lit.jpg' 
-                        text='ortho'
+                        title='Lit Orthopedique'
                         label='Medicament'
-                        path='/details'/>
+                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='tunis'
+                        />
                         <AnnoncesItem
                         src='assets/images/chaiseroulante.jpg' 
-                        text='ortho'
+                        title='ortho'
+                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
                         label='Medicament'
-                        path='/details'/>
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Monastir'
+                        />
                     </ul> 
                     </Parallax>
                     <Parallax
@@ -41,20 +53,68 @@ function Annonces() {
                     <ul className="cards__items">
                         <AnnoncesItem
                         src='assets/images/medi.jpg' 
-                        text='medicaments '
+                        title='medicaments '
+                        desc='Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
                         label='Medicament'
-                        path='/details'/>
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Ariana'
+                       />
                         <AnnoncesItem
                         src='assets/images/lit.jpg' 
-                        text='ortho'
+                        title='lit ortho'
+                        desc=' cest la description'
                         label='Medicament'
-                        path='/details'/>
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Ariana'
+                        />
                         <AnnoncesItem
                         src='assets/images/chaiseroulante.jpg' 
-                        text='ortho'
+                        title='chaise roulante'
+                        desc=' cest la description'
                         label='Medicament'
-                        path='/details'/>
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Ariana'
+                        />
                     </ul>
+                    </Parallax>
+                    <Parallax
+          animation={{ x: 0, opacity: 1, playScale: [0.5, 0.8] }}
+          style={{ transform: 'translateX(-100px)', opacity: 0 }}
+          className="cards__items"
+        >
+                    <ul className="cards__items"> 
+                    {/* ce Code est statique , il faut le changer avec la base de donne  */}
+                        <AnnoncesItem
+                        src='assets/images/medi.jpg' 
+                        title='medicaments '
+                        label='Medicament'
+                        desc=' cest la description cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Ariana'
+                        />
+                        <AnnoncesItem
+                        src='assets/images/lit.jpg' 
+                        title='Lit Orthopedique'
+                        label='Medicament'
+                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='tunis'
+                        />
+                        <AnnoncesItem
+                        src='assets/images/chaiseroulante.jpg' 
+                        title='ortho'
+                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
+                        label='Medicament'
+                        username='nada'
+                        moffre='offre volontaire(gratuit)'
+                        lieu='Monastir'
+                        />
+                    </ul> 
                     </Parallax>
                 </div>
             </div>

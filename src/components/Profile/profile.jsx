@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-
+import {Link} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -43,7 +43,7 @@ export default function Profile() {
 
   return (
     <React.Fragment>
-      <div  className={classes.container}  container>
+      <div  className={classes.container}  style={{height:"auto"}}>
         <img
           className={classes.profileImage}
           alt="Nom et prenom"
@@ -53,10 +53,16 @@ export default function Profile() {
           <Typography  component="h1" variant="h4">
             Nom Prenom
           </Typography>
-          <Button style={{marginTop:"10px"}} to="/publierannonce" variant="outlined" color="primary" fullWidth>
+          <p style={{color:"grey",marginRight:"75px"}} > 3 publications</p>
+          <Link to='/publierannonce'>  <Button style={{marginTop:"10px"}} to="/publierannonce" variant="outlined" color="primary" fullWidth>
             Publier Annonce
           </Button>
-
+          </Link> 
+          <Link to='/favoris'>
+          <Button style={{marginTop:"15px"}} variant="outlined" color="primary" fullWidth>
+            Voir mes favoris
+          </Button>
+          </Link>
           <Button style={{marginTop:"15px"}} to="/" variant="outlined" color="primary" fullWidth>
             modifier profile
           </Button>

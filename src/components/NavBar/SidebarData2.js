@@ -3,17 +3,18 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
+import { AiFillHeart} from "react-icons/ai";
 
 export const SidebarData = [
   {
-    title: 'accueil',
+    title: 'Accueil',
     path: '/',
     icon: <AiIcons.AiFillHome />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
   },
   {
-    title: 'Categorie',
+    title: 'Catégorie',
     icon: <FaIcons.FaCartPlus />,
 
     iconClosed: <RiIcons.RiArrowDownSFill />,
@@ -21,13 +22,13 @@ export const SidebarData = [
 
     subNav: [
       {
-        title: 'medicaments',
+        title: 'Médicaments',
         path: '/productlist',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
-        title: 'Mobilier Medicale',
+        title: 'Mobilier Médicale',
         path: '/productlist',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
@@ -37,8 +38,25 @@ export const SidebarData = [
         path: '/productlist',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
-      }
+      },
+      {
+        title: 'Soin et Pansements',
+        path: '/productlist',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Autres',
+        path: '/productlist',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
     ]
+  },
+  {
+    title: 'Mes Favoris',
+    path: '/favoris',
+    icon: <AiFillHeart/>
   },
   {
     title: 'Support',

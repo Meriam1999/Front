@@ -1,8 +1,6 @@
 img{
     object-fit: cover;
-    width:90%;
-    height:400px;
-    margin-top: 2px;
+    width:100%;
     align-items: center;
     z-index: -1;
     border-radius: 5px;

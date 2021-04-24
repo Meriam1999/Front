@@ -1,96 +1,48 @@
 import React from 'react';
 import '../ImageAcceuil/ImageAcceuil.css';
-import Particles from "react-tsparticles";
- 
+import 'antd/dist/antd.css';
+import { Carousel } from 'antd';
+import pic1 from './pic1.png';
+import pic2 from './pic2.jpg';
+import pic3 from './pic3.png';
+import pic4 from './pic4.png';
+import pic5 from './pic5.png';
+
+
+
+
+
+const contentStyle = {
+  height: '500px',
+  marginTop:"7px",
+  color: '#fff',
+  borderRadius:"3px",
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: 'white',
+};
 
 function ImageAcceuil() {
     return (
-            <div className='image-acceuil-container'>
-                {/* <Particles
-        id="tsparticles"
-        options={{
-          background: {
-            color: {
-              value: "#0d47a1",
-            },
-          },
-          fpsLimit: 60,
-          interactivity: {
-            detectsOn: "canvas",
-            events: {
-              onClick: {
-                enable: true,
-                mode: "push",
-              },
-              onHover: {
-                enable: true,
-                mode: "repulse",
-              },
-              resize: true,
-            },
-            modes: {
-              bubble: {
-                distance: 400,
-                duration: 2,
-                opacity: 0.8,
-                size: 40,
-              },
-              push: {
-                quantity: 4,
-              },
-              repulse: {
-                distance: 200,
-                duration: 0.4,
-              },
-            },
-          },
-          particles: {
-            color: {
-              value: "#ffffff",
-            },
-            links: {
-              color: "#ffffff",
-              distance: 150,
-              enable: true,
-              opacity: 0.5,
-              width: 1,
-            },
-            collisions: {
-              enable: true,
-            },
-            move: {
-              direction: "none",
-              enable: true,
-              outMode: "bounce",
-              random: false,
-              speed: 6,
-              straight: false,
-            },
-            number: {
-              density: {
-                enable: true,
-                value_area: 800,
-              },
-              value: 80,
-            },
-            opacity: {
-              value: 0.5,
-            },
-            shape: {
-              type: "circle",
-            },
-            size: {
-              random: true,
-              value: 5,
-            },
-
-          },
-          detectRetina: true,
-        }}
-    //   /> */}
-         <img src="/assets/images/medicine.png" /> 
+      <>
+            <div > 
+              {/* <Slideshow />   */}
+          {/* <img src="/assets/images/medicine.png" />  */}
+          <Carousel autoplay effect="fade">
+    <div>
+      <h3 style={contentStyle}> <img src={pic1} /></h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}><img src={pic5}/></h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}><img src={pic3}/></h3>
+    </div>
+    
+  </Carousel>
             
         </div>
+      </>
     )
 }
 
