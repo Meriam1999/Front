@@ -89,7 +89,7 @@ const Sidebar = () => {
           <NavIcon to='#'>
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
-          <span className="EmedTn"> <b>VmedicTn</b></span>
+          <Link to="/admin/Acceuil"> <span className="EmedTn"> <b>VmedicTn</b> <img style={{width:"90px",height:"90px",paddingRight:"40px"}} src="../logo.png" /></span></Link>
         </Nav>
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>

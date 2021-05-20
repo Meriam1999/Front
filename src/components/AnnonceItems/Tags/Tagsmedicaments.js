@@ -108,7 +108,7 @@ class EditableTagGroup extends React.Component {
                     }
                   }}
                 >
-                  {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                  {isLongTag ? `${tag.slice(0, 4)}...` : tag}
                 </span>
               </Tag>
             );

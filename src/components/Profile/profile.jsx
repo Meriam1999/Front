@@ -63,9 +63,11 @@ export default function Profile() {
             Voir mes favoris
           </Button>
           </Link>
-          <Button style={{marginTop:"15px"}} to="/" variant="outlined" color="primary" fullWidth>
+          <Link to='/profil/parametres'>
+          <Button style={{marginTop:"15px"}} variant="outlined" color="primary" fullWidth>
             modifier profile
           </Button>
+          </Link>
         </div>
       </div>
     </React.Fragment>

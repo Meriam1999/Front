@@ -6,7 +6,6 @@ import { Parallax } from 'rc-scroll-anim';
 function Annonces() {
     return (
         <div className='cards'>
-            <h1>Annonces à la une</h1>
             <div className="cards__container">
                 <div className="cards__wrapper">
                 <Parallax

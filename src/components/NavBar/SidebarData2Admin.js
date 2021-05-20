@@ -25,7 +25,11 @@ export const SidebarData = [
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
   },
- 
+  {
+    title: 'Gestion des Catégories',
+    path: '/admin/GestionCategorie',
+    icon: <IoIcons.IoMdHelpCircle />
+  },
   {
     title: 'Gestion des Reclamations',
     path: '/admin/Reclamations',

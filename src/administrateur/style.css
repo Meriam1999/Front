@@ -1,0 +1,11 @@
+.ant-table-filter-trigger-container{
+    width:30px
+}
+
+.ant-dropdown-trigger.ant-table-filter-trigger{
+    margin-left: 2px;
+}
+
+.anticon.anticon-search{
+    margin-left: 2px;
+}

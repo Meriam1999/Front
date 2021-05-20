@@ -1,0 +1,43 @@
+
+#pubAnnonce  .anticon.anticon-down.ant-select-suffix{
+        position:relative;
+        right:30px;
+}
+
+.fleche .ant-input-number-handler-wrap{
+        width: 20px;
+        right:20px;
+}
+.anticon.anticon-check-circle{
+        right:20px
+}
+
+.ant-form-item-explain.ant-form-item-explain-error{
+        margin-left: 50px;
+}
+
+.ant-form-item-control-input-content .ant-btn.ant-btn-primary{
+
+        width:95px
+}
+.ant-form-item-control-input-content .ant-btn.ant-btn-primary span{
+
+margin-left:12px;
+}
+
+.ant-select-arrow{
+        margin-top: -13px;
+        margin-left: 15px;
+}
+
+.ant-form-item-explain.ant-form-item-explain-error div{
+margin-left: 70px;
+}
+
+.ant-form-item-control-input .ant-form-item-explain.ant-form-item-explain-error {
+margin-left: -40px;
+}
+
+.FormRecherche .ant-form-item-explain.ant-form-item-explain-error div{
+margin-left: 10px;
+}

@@ -34,7 +34,7 @@ const style1={
   fontWeight:"bold",
   color:"Grey",
   letterSpacing: "2px",
-  marginLeft:"430px",
+  marginLeft:"475px",
   marginTop:"20px"
 
 }
@@ -42,7 +42,7 @@ const style1={
     <>
     <Sidebar/>
     <TypeWriterEffect
-            textStyle={{ fontFamily:"sans-serif", textAlign:"center", fontWeight:"bold",marginTop:"25px"  }}
+            textStyle={{ fontFamily:"sans-serif", textAlign:"center", fontWeight:"bold",marginTop:"25px" ,marginLeft:"30px" }}
             startDelay={100}
             cursorColor="black"
             text="Publier une Annonce"
@@ -55,7 +55,7 @@ const style1={
          </div> */}
 
 
-         <Tabs tabBarStyle={style1}  tabBarGutter="100px" onChange={callback} type="card" >
+         <Tabs tabBarStyle={style1}  tabBarGutter="10px" onChange={callback} type="card" >
             <TabPane tab="D'offre/De Vente" size="large" key="1" className="profile-tabitem" >
             <div style={{marginTop:"20px",backgroundColor:"#f2f2f2",width:"90%",borderRadius:"5px"}}>
            <center><PubAnnonce /></center>

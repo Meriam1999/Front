@@ -47,7 +47,28 @@
     margin-top:7px;
     margin-right:390px;
     font-size: 27px;
-    color: black;
+    color: #e6e6e6;
+}
+ .Message1{
+        padding:8px 20px;
+        position:absolute;
+            right:0;
+            top:13px;
+        margin-top:7px;
+        margin-right:430px;
+        font-size: 25px;
+        color: #e6e6e6;
+
+}
+
+.Avatar{
+         background-color:#87d068;
+        
+        position:absolute;
+            right:0;
+            top:17px;
+        margin-top:7px;
+        margin-right:490px;
 
 }
 .btn--outline1{

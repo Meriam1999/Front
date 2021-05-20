@@ -5,17 +5,15 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { SidebarData } from './SidebarData2';
 import SubMenu from './SubMenu';
-import { MessageTwoTone  } from '@ant-design/icons';
-import ForumOutlinedIcon from '@material-ui/icons/ForumOutlined';
+import { WechatOutlined,BellFilled,UserOutlined} from '@ant-design/icons';
 import { IconContext } from 'react-icons/lib';
 import { Button } from '../Button/Button';
 import {Button2} from '../Button/Button2';
 import 'antd/dist/antd.css';
-import { Input } from 'antd';
-
-
+import { Input ,Avatar} from 'antd';
 import '../Button/Button.css';
 import './Navbar.css';
+import { Badge } from '@material-ui/core';
 
 const Nav = styled.div`
   background:  #0086b3;
@@ -79,15 +77,16 @@ const Sidebar = () => {
           <ul style={{display:"inline-block"}}>
            <li>{button && <Button /*onClick={()=>{setButton(false)}}*/ buttonStyle='btn--outline'> Connectez-vous </Button>}</li>
            <li>{button && <Button2  /*onClick={()=>{setButton(false)}}*/ buttonStyle='btn--outline'> Publier une Annonce </Button2>}</li>
-           <li> <Link to="/Chat"><MessageTwoTone className="Message" /></Link></li>
+           <li> <Link to="/Chat"><WechatOutlined  className="Message" /></Link></li>
+          <li> <Link to="/"><BellFilled className="Message1" dot /></Link></li>
+          <li> <Link to="/profile"><Avatar className="Avatar" icon={<UserOutlined />} /></Link> </li>
            <li><Search className="searchBar"placeholder="input search text" onSearch={onSearch} style={{ width:"240px",borderRadius:"4px" }} /> </li>
          </ul>
 
           <NavIcon to='#'>
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
-
-          <Link to="/"><span className="EmedTn"> <b>VmedicTn</b> <img style={{width:"90px",height:"90px",paddingRight:"40px"}} src="./logo.png" /></span></Link>
+       <Link to="/"> <span className="EmedTn"> <b>VmedicTn</b> <img style={{width:"90px",height:"90px",paddingRight:"40px"}} src="../logo.png" /></span></Link>
        
         </Nav>
         <SidebarNav sidebar={sidebar}>

@@ -4,3 +4,49 @@
     line-height: 0.77;
    
 }
+
+.anticon.anticon-down.ant-select-suffix svg{
+    margin-top: 7px;
+    margin-left: -13px;
+}
+
+.FormModifProfile .ant-btn.ant-btn-primary{
+    width:200px;
+}
+
+.FormModifProfile2 .ant-form-item-explain.ant-form-item-explain-error div{
+    margin-left: 10px;
+}
+.FormModifProfile .ant-form-item-explain.ant-form-item-explain-error div{
+    margin-left: 35px;
+}
+
+.FormModifProfile2 .ant-btn.ant-btn-primary{
+    width:200px;
+}
+
+.FormModifProfile .ant-upload.ant-upload-select.ant-upload-select-picture-card{
+margin-left: 320px;
+}
+
+.each-slide > div {
+  width:"100%";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  height: 600px;
+}
+
+.MuiGrid-root.MuiGrid-container.MuiGrid-justify-xs-flex-end{
+    margin-left:-60px;
+}
+
+.MuiGrid-root .MuiGrid-container{
+    margin-top: 20px;
+    margin-left: 100px;
+}
+.MuiFormControlLabel-root{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

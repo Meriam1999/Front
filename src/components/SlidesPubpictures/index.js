@@ -76,8 +76,8 @@ import React, {useState, useEffect} from 'react';
             </div>
 
             <div className="slideshow-controller">
-                <span style={{borderRadius:"5px"}} onClick={previous}>Previous</span>
-                <span style={{borderRadius:"5px"}} onClick={next}>Next</span>
+                <span style={{borderRadius:"5px"}} onClick={previous}>Précédent</span>
+                <span style={{borderRadius:"5px"}} onClick={next}>Suivant</span>
             </div>
         </section>
     )

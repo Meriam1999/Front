@@ -1,0 +1,44 @@
+.cardd{
+    width:500px;
+    margin-left:30px;
+    margin-top:30px;
+}
+
+.ant-btn.ant-btn-primary{
+    margin-top: 7px;
+    margin-right: 3px;
+    width:70px;
+    
+}
+.ant-btn.ant-btn-primary span{
+    margin-left: -4px;
+    
+}
+
+.ant-popover-inner{
+    width: 370px;
+}
+
+.anticon.anticon-exclamation-circle{
+    margin-left: 3px;
+}
+.anticon.anticon-question-circle{
+    margin-left: 2px;
+}
+.site-card-border-less-wrapper{
+margin-left:60px;
+background-color:#e0ebeb;
+width:90%;
+border-radius:8px;
+margin-top:50px;
+margin-bottom:30px;
+
+}
+
+.container{
+margin-top:20px;
+ display:inline-flex;
+ flex-direction:row;
+ margin-left:20px;
+ margin-bottom:20px;
+}
