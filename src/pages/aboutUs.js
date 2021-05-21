@@ -8,7 +8,7 @@ function aboutus() {
     <Sidebar/>
     <div >
         <h1> About Us*</h1>
-        <div> mariem maruouma </div>
+        <div> mariem eeemaruouma </div>
     </div>
     </>
   );
