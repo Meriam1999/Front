@@ -1,5 +1,6 @@
-import React,{useState} from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import './style.css'
 import {
   Avatar,
   Button,
@@ -11,42 +12,35 @@ import {
   Container
 } from "@material-ui/core";
 
+import { useHistory } from "react-router-dom";
+
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import {notification} from 'antd';
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import users from "../Data/Data";   
-
-import authService from "../service/authService.js";
+import { notification } from 'antd';
 
 
-const MIN_USERNAME_LENGTH = 2;
- const MIN_PASSWORD_LENGTH = 3;
+const openNotificationsucces = (placement, message) => {
+  notification.success({
+    message,
+    placement,
+  });
+};
+const openNotificationerror = (placement, message) => {
+  notification.error({
+    message,
+    placement,
+  });
+};
+const openNotificationwarning = (placement, message) => {
+  notification.warning({
+    message,
+    placement,
+  });
+};
 
- const openNotification = (placement,message) => {
-    notification.info({
-      message,
-      placement,
-    });
-  };
-
-const currencies = [
-  {
-    value: 'Homme'
-  },
-  {
-    value: 'Femme',
-    
-  },
-];
-
-
-// const handleChange = (event) => {
-//   setCurrency(event.target.value);
-// };
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -71,32 +65,44 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function SignUp(props) {
+
   const classes = useStyles();
 
 
- /**************************************** */
- const [account, setAccount] = React.useState({ Nom:"",Identifiant:"",Prenom:"",Motdepasse1:"",Motdepasse2:"",Email:"",Numero:"" });
- const [error, setError] = React.useState({ Identifiant:"",Prenom:"" ,Nom:"",Motdepasse1:"",Motdepasse2:"",Email:"",Numero:"" });
- const [open, setOpen] = React.useState(false);
-const [Nom,setNom] = useState("");
-const [Prenom,setPrenom] = useState("");
-const [Identifiant,setidentifiant] = useState("");
-const [Sexe,setSexe] = useState("");
-const [dateNaissance,setDateNaissance] = useState("");
-const [Numero,setNumero] = useState("");
-const [Email,setemail] = useState("");
-const [Motdepasse1,setMotdepasse1] = useState("");
-const [Motdepasse2,setMotdepasse2] = useState("");
- const valideinscri =()=>{
-    if(Nom && Prenom && Identifiant &&Numero && Motdepasse1 && Motdepasse2 && Email &&dateNaissance &&Sexe ){
-      return  true
+  /**************************************** */
+
+  const [Sexe, setSexe] = useState("");
+  // const [dateNaissance,setDateNaissance] = useState("");
+  const [numero_telephone, setnumero_telephone] = useState("");
+  const [Email, setemail] = useState("");
+  const [Motdepasse1, setMotdepasse1] = useState("");
+  const [Motdepasse2, setMotdepasse2] = useState("");
+
+
+  const initialData = { nom: "", prenom: "", email: "", numero_telephone: "", motPasse: "", motPasseConfirme: "", identifiant: "", Sexe: "" }
+  const [data, setData] = useState({ ...initialData })
+  const [dataErrors, setDataErrors] = useState({})
+
+  const valideinscri = () => {
+    if (Sexe && data.nom !== "" && data.prenom !== "" && data.email !== "" && data.numero_telephone !== "" && data.motPasse !== "" && data.motPasseConfirme !== "" && data.identifiant !== "" && dataErrors.numero_telephoneError === "" && dataErrors.nomError === "" && dataErrors.emailError === "" && dataErrors.prenomError === "" && dataErrors.motPasseConfirmeError === "") {
+      console.log("ok");
+      return true
+    } else {
+      console.log("non")
+      return false
     }
-    return false
   }
   const [open1, setOpen1] = React.useState(false);
+  const resetData = () => {
+    setData("");
+    setSexe("");
+    return true
+  };
+  const history = useHistory();
+
 
   const handleChange1 = (event) => {
-    setSexe(event.target.value);
+    setSexe(event.target.value)
   };
 
   const handleClose1 = () => {
@@ -109,179 +115,126 @@ const [Motdepasse2,setMotdepasse2] = useState("");
 
   const handleinscrit = (event) => {
     event.preventDefault();
-    if(valideinscri()) {
-     openNotification('bottomRight','ok');
-    }else{
-      openNotification('bottomRight','Merci de Remplir Tous les Champs obligatoires!');
+    const NvUtilisateur = {
+      Nom: data.nom,
+      Prenom: data.prenom,
+      Nom_utilisateur: data.identifiant,
+      Mot_de_passe: data.motPasse,
+      Photo_profile: "photo",
+      Genre: Sexe,
+      Email: data.email,
+      Numero_telephone: data.numero_telephone,
+    };
+
+    if (valideinscri()) {
+      axios.post('/user/ajouter', NvUtilisateur)
+        .then((res) => {
+          openNotificationsucces('bottomRight', 'inscription effectuée avec succès , Veuillez vous Connectez ');
+          console.log("ajout utilisateur avec succes ")
+          console.log(res)
+
+        }).catch((error) => {
+          console.log(error.response);
+        });
+      history.push("/connexion");
+    } else {
+      openNotificationwarning('bottomRight', 'Veuillez Remplir tous les Champs avec des informations valides SVP!');
     }
   }
   /*************************************** */
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") { 
-      return;
-    }
-    setOpen(false);
-  };
 
-  const handleChange = (props, event) => {
-    const accountCopy = {
-      ...account
-    };
-    accountCopy[props] = event.target.value;
-    setAccount(accountCopy);
-    validate(props);
-  };
- 
- 
 
-  
-  //nekteb heja fil page mch home 
-  const handleLogin = () => {
-    if (isValidUser(account.Identifiant, account.Prenom,account.Nom,account.Motdepasse1,account.Motdepasse2,account.Numero)) {
-      authService.doLogin(account.Identifiant);
-      props.history.push("/");// login   
-     } else {
-      setOpen(true);
-    }
-  };
-  const validate = (props) => {
-    if (props === "Identifiant" ){
-       validateidentitifant()}
-      else if (props === "Prenom"){
-        validateprenom()
-      } 
-      else if (props==="Nom"){
-        validatenom()
-      }else if (props==="Motdepasse1")
-      {
-        validateMotdepasse1()
+  const validInputData = (name, value) => {
+    const regExp = [/^[a-zA-Z]+$/,
+      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
+      /^[0-9\b]+$/g,
+
+    ]
+    const testFunctions = {
+      'prenom': () => {
+        if (!regExp[0].test(value.replace(' ', ''))) {
+          return "Le prénom ne doit contenir que des lettres !"
+        }
+        else if (value.length < 3) {
+          return "Le prénom doit contenir au moins 3 lettres !"
+        } else {
+          return ""
+        }
+      },
+      'nom': () => {
+        if (!regExp[0].test(value.replace(' ', ''))) {
+          return "Le nom ne doit contenir que des lettres"
+        }
+        else if (3 > value.length) {
+          return "Le nom doit contenir au moins 3 letters !!"
+        } else {
+          return ""
+        }
+      },
+      'email': () => {
+        if (!regExp[1].test(value)) {
+          return "L'email est Invalide !"
+        }
+        else {
+          return ""
+        }
+      },
+      'numero_telephone': () => {
+        if (!regExp[2].test(value)) {
+          return "Le Numéro de téléphone est Invalide !"
+        } else if (value.length !== 8) {
+          return "le Numéro de téléphone doit etre composé que de 8 chiffres "
+        }
+        else {
+          return ""
+        }
+      },
+      'identifiant': () => { return "" },
+      'motPasse': () => {
+        if (5 > value.length) {
+          return "Le mot de passe doit contenir au moins 6 caractéres"
+        }
+
+      },
+      'motPasseConfirme': () => {
+        return value !== data.motPasse ? "Les deux mots de passe ne sont pas Identiques !" : ""
+      },
+      'identifiant': () => {
+        if (3 > value.length) {
+          return "Le Nom d'Utilisateur doit contenir au moins 4 caractéres"
+        }
       }
-      else if(props==="Motdepasse2")
-      {
-        validateMotdepasse2()
-      }
-      else if(props==="Email")
-      {
-        validateEmail()
-      }else if(props==="Numero")
-      {
-        validateNumero()
-      }
-  };
-
-  const isValidUser = ( Identifiant, Prenom,Nom,Motdepasse1,Motdepasse2,Email,Numero) => {
-    return users.find(
-      (user) => user.Identifiant === Identifiant && user.Prenom === Prenom && user.Nom===Nom&& user.Motdepasse1===Motdepasse1 && user.Motdepasse2===Motdepasse2&& user.Email===Email&& user.Numero===Numero
-    );
-  };
-/***********Controle de saisies des champs :  *************/
-  const validatenom = () => {
-    const errorCopy = { ...error };
-     if(! /^[a-zA-Z]*$/g.test(account.Nom)) {
-        errorCopy.Nom = "Veuillez insèrer que des lettres SVP !";  
     }
-    else if (account.Nom.length < MIN_USERNAME_LENGTH) {
-                   errorCopy.Nom = `Le Nom d'utilisateur doit être supérieur à ${MIN_USERNAME_LENGTH} caractéres `;
-          } 
-          else if (account.Nom.length > 15) {
-                   errorCopy.Nom= `Le Nom d'utilisateur ne peut pas depasser 15 caractéres !`;
-          } 
-          else {
-               errorCopy.Nom= "";
-          }
-    setError(errorCopy);
-  };
 
-   const validateprenom = () => {
-    const errorCopy = { ...error };
-
-      if(! /^[a-zA-Z]*$/g.test(account.Prenom)) {
-        errorCopy.Prenom = "Veuillez insèrer que des lettres SVP !"; 
+    if (value) {
+      return (testFunctions[name]())
     }
-    else if (account.Prenom.length < MIN_USERNAME_LENGTH) {
-                   errorCopy.Prenom = `Le Prenom d'utilisateur doit être supérieur à ${MIN_USERNAME_LENGTH} caractéres `;
-                    
-          } 
-          else if (account.Prenom.length > 15) {
-                   errorCopy.Prenom= `Le Prenom d'utilisateur ne peut pas depasser 15 caractéres !`;
-                   
-          } 
-          else {
-               errorCopy.Prenom= "";
-              
-          }
-    setError(errorCopy);
+    return "Ce champ est obligatoire !"
+  }
+
+  const handleChange = (event) => {
+    const newData = { ...data };
+    const { value, name } = event.target;
+    newData[name] = value;
+    setData(newData);
+    const newDataErros = { ...dataErrors };
+    newDataErros[`${name}Error`] = validInputData(name, value);
+    if (name === 'motPasse') {
+      newDataErros.motPasseConfirmeError = value === data.motPasseConfirme ? "" : "Les deux mots de passe ne sont pas Identiques !"
+    }
+    if (name === 'Sexe') {
+
+    }
+    setDataErrors(newDataErros);
   };
 
-   const validateidentitifant = () => {
-     const errorCopy = { ...error };
 
-      if (account.Identifiant.length < MIN_USERNAME_LENGTH) {
-                   errorCopy.Identifiant = `L'identifiant  doit être supérieur à ${MIN_USERNAME_LENGTH} caractéres `;
-                    
-          } 
-          else if (account.Identifiant.length > 15) {
-                   errorCopy.Identifiant= `L'identifiant ne peut pas depasser 15 caractéres !`;
-                   
-          } 
-          else {
-               errorCopy.Identifiant= "";
-          }
-    setError(errorCopy);
-  };
-
-  const validateMotdepasse1 = () => {
-    const errorCopy = { ...error };
-    if (account.Motdepasse1.length < 5) {
-      errorCopy.Motdepasse1 = `Le mot de passe doit être supérieur 5 caracteres`;
-    } else {
-      errorCopy.Motdepasse1= "";
-    }
-    setError(errorCopy);
-  };
-
-  const validateMotdepasse2 = () => {
-    const errorCopy = { ...error };
-    if ( (account.Motdepasse2 !== account.Motdepasse1) && (account.Motdepasse2.includes(account.Motdepasse1))) {
-      errorCopy.Motdepasse2 = 'Les deux mots de passes ne se correspondent pas !';
-    } else {
-      errorCopy.Motdepasse2= "";
-    }
-    setError(errorCopy);
-  };
-  const validateNumero = () => {
-    const errorCopy = { ...error };
-    if( !/^[0-9\b]+$/g.test(account.Numero)) {
-        errorCopy.Numero = "Veuillez insèrer que des Chiffres SVP !"; 
-    }
-    else if (account.Numero.length != 7) {
-                   errorCopy.Numero = 'Le Numero de Téléphone doit etre composée de 8 chiffres !' ;
-    }
-   
-          else {
-               errorCopy.Numero= "";
-          }
-    setError(errorCopy);
-  };
-
-  const validateEmail= () => {
-    const errorCopy = { ...error };
-    if(!/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i.test(account.Email)){
-       errorCopy.Email = `Veuillez saisir un Email Correcte !`;
-    } 
-    else if (account.Email.length < MIN_PASSWORD_LENGTH) {
-      errorCopy.Email = `l'Email doit être supérieur a  ${MIN_PASSWORD_LENGTH} caracteres`;
-    } else {
-      errorCopy.Email= "";
-    }
-    setError(errorCopy);
-  };
 
   return (
-    <Container  style={{paddingBottom:"50px",marginTop:"-40px" , borderColor:"grey" }}component="main" maxWidth="xs" >
+    <Container style={{ paddingBottom: "50px", marginTop: "-40px", borderColor: "grey" }} component="main" maxWidth="xs" >
       <CssBaseline />
       <div className={classes.paper}>
-       <img style={{width:"120px",height:"120px",paddingRight:"5px",marginBottom:"-25px"}} src="../logo.png" />
+        <img style={{ width: "120px", height: "120px", paddingRight: "5px", marginBottom: "-25px" }} src="../logo.png" />
         <Typography component="h1" variant="h5">
           Inscription
         </Typography>
@@ -289,13 +242,12 @@ const [Motdepasse2,setMotdepasse2] = useState("");
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                name="Nom"
+                name="nom"
                 variant="outlined"
-                value={Nom}
-                onChange={(event)=>{
-        setNom(event.target.value) ;handleChange("Nom", event);}}  
-               error={error.Nom}
-                helperText={error.Nom}
+                value={data.nom}
+                onChange={handleChange}
+                error={dataErrors.nomError ? true : false}
+                helperText={dataErrors.nomError}
                 id="Nom"
                 fullWidth
                 autoFocus
@@ -306,38 +258,34 @@ const [Motdepasse2,setMotdepasse2] = useState("");
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
-               required
+                required
                 fullWidth
-                value={Prenom}
-                onChange={(event)=>{
-        setPrenom(event.target.value) ; handleChange("Prenom", event);}} 
-                error={error.Prenom}
-                helperText={error.Prenom}
+                value={data.prenom}
+                onChange={handleChange}
+                error={dataErrors.prenomError ? true : false}
+                helperText={dataErrors.prenomError}
                 id="Prenom"
                 label="Prenom"
-                name="Prenom"
-                autoComplete="Prenom"
+                name="prenom"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-              required
+                required
                 variant="outlined"
-                 value={Identifiant}
-                onChange={(event)=>{
-        setidentifiant(event.target.value); handleChange("Identifiant", event);}}  
+                onChange={handleChange}
                 fullWidth
-                error={error.Identifiant}
-                helperText={error.Identifiant}
+                value={data.identifiant}
+                error={dataErrors.identifiant}
+                helperText={dataErrors.identifiant}
                 id="identifiant"
-                label="Identifiant"
-                name="Identifiant"
-                autoComplete="off"
+                label="Nom d'utilisateur"
+                name="identifiant"
               />
             </Grid>
-           
-            <Grid item xs={12} sm={6}>
-            <TextField
+
+            {/* <Grid item xs={12} sm={6}> */}
+            {/* <TextField
                 variant="outlined"
               onChange={(value)=>{
                   if(value){
@@ -351,98 +299,88 @@ const [Motdepasse2,setMotdepasse2] = useState("");
                 name="dateNaissance"
                 
               />   
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
+              <Select
+
+                id="demo-controlled-open-select"
+                open={open1}
+                required
+                name="Sexe"
+                onClose={handleClose1}
+                onOpen={handleOpen1}
+                value={Sexe}
+                onChange={(e) => { setSexe(e.target.value); console.log(e.target.value) }}
+              >
+                <MenuItem value="Femme"> Femme </MenuItem>
+                <MenuItem value="Homme">Homme</MenuItem>
+              </Select>
+            </Grid>
+
+            <Grid item xs={12} >
               <TextField
                 variant="outlined"
                 required
-             value={Numero}
-                onChange={(event)=>{
-        setNumero(event.target.value);handleChange("Numero", event);}}  
-              error={error.Numero}
-                helperText={error.Numero}
+                onChange={handleChange}
+                value={data.numero_telephone}
+                error={dataErrors.numero_telephoneError ? true : false}
+                helperText={dataErrors.numero_telephoneError}
                 fullWidth
-                id="Numero"
-                label="Numero de telephone "
-                name="Numero"
+                id="numero_telephone"
+                label="numero de telephone "
+                name="numero_telephone"
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-      
-           
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={open1}
-          required
-          onClose={handleClose1}
-          onOpen={handleOpen1}
-          value={Sexe}
-          onChange={setSexe}
-          onChange= {handleChange1}
-        >
-          <MenuItem value="Femme">
-            <em> Femme </em>
-          </MenuItem>
-          <MenuItem value="Homme">Homme</MenuItem>        
-        </Select>
-           
-    
             </Grid>
 
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
-                 value={Email}
-                onChange={(event)=>{
-        setemail(event.target.value);handleChange("Email", event);}}  
+                value={data.email}
+                error={dataErrors.emailError ? true : false}
+                helperText={dataErrors.emailError}
+                onChange={handleChange}
                 fullWidth
-                error={error.Email}
-                helperText={error.Email}
                 id="Email"
                 label="Adresse E-mail"
-                name="Email"
+                name="email"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
                 required
                 fullWidth
-                name="Motdepasse1"
+                type="password"
+                variant="outlined"
                 label="mot de passe"
-                
-                 value={Motdepasse1}
-                onChange={(event)=>{
-        setMotdepasse1(event.target.value); handleChange("Motdepasse1", event);}}  
-                error={error.Motdepasse1}
-                helperText={error.Motdepasse1}
+                name="motPasse"
+                onChange={handleChange}
+                value={data.motPasse}
+                error={dataErrors.motPasseError ? true : false}
+                helperText={dataErrors.motPasseError}
                 id="Motdepasse1"
-                autoComplete="mot de passe"
-              
+
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
-               
-               value={Motdepasse2}
-                onChange={(event)=>{
-        setMotdepasse2(event.target.value); handleChange("Motdepasse2", event);}}  
+                type="password"
+                onChange={handleChange}
                 fullWidth
-                error={error.Motdepasse2}
-                helperText={error.Motdepasse2}
-                name="Motdepasse2"
+                value={data.motPasseConfirme}
+                error={dataErrors.motPasseConfirmeError ? true : false}
+                helperText={dataErrors.motPasseConfirmeError}
+                name="motPasseConfirme"
                 label="Confirmer votre mot de passe"
                 id="Motdepasse2"
                 autoComplete="new-password"
               />
             </Grid>
-            
+
           </Grid>
-          
+
           <Button
             type="submit"
             fullWidth
@@ -451,7 +389,17 @@ const [Motdepasse2,setMotdepasse2] = useState("");
             className={classes.submit}
             onClick={handleinscrit}
           >
-            Confirmer 
+            Confirmer
+          </Button>
+          <Button
+            type="reset"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.reset}
+            onClick={resetData}
+          >
+            Annuler
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -460,7 +408,7 @@ const [Motdepasse2,setMotdepasse2] = useState("");
           </Grid>
         </form>
       </div>
-    
+
     </Container>
   );
 }

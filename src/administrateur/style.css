@@ -9,3 +9,11 @@
 .anticon.anticon-search{
     margin-left: 2px;
 }
+
+.anticon.anticon-eye{
+    margin-left: -2px;
+}
+
+.ant-image-mask{
+    border-radius: 50%;
+}

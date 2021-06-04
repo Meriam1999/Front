@@ -10,7 +10,7 @@ function Chat2() {
   return (
     <div>
       <Sidebar/>
-      <div className="messenger">
+      <div className="messenger" style={{marginTop:"10px"}}>
 
         <div className="ChatMenu">
           <div className="ChatMenuWrapper" >

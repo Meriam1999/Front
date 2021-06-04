@@ -6,9 +6,102 @@ import TypeWriterEffect from 'react-typewriter-effect';
 import 'antd/dist/antd.css';
 import { Statistic, Card, Row, Col } from 'antd';
 import { ArrowUpOutlined ,UserOutlined,ManOutlined,WomanOutlined,NumberOutlined  } from '@ant-design/icons';
+import axios from 'axios';
+import {FaRegAngry,FaUserNurse,FaUserAlt} from  'react-icons/fa';
+import {FaWallet} from  'react-icons/fa';
 
+export default class HomePage extends React.Component {
+   constructor () {
+    super();
+  this.state = {
+    searchText: '',
+    searchedColumn: '',
+    tableusers: [{
+                        _id:'',
+                        Nom :'',
+                        Prenom:'',
+                        Nom_utilisateur:'',
+                        Mot_de_passe:'',
+                        Photo_profile:'',
+                        Genre:[''],
+                        etat:[''],
+                        Email:'',
+                        Numero_telephone:''
 
-function HomePage() {
+                  }],
+      tableexperts: [{
+                        _id:'',
+                        Nom :'',
+                        Prenom:'',
+                        Nom_utilisateur:'',
+                        Mot_de_passe:'',
+                        Photo_profile:'',
+                        Genre:[''],
+                        Email:'',
+                        etat:[''],
+                        job:[''],
+                        Numero_telephone:''
+
+                  }],
+      tableReclamations: [{
+                        _id:'',
+                        Titre_reclamation:'',
+                        Contenu:'',
+                        Date:''
+                  }],
+      tableCateg: [{
+                        _id:'',
+                        nom:'',
+                        description:'',
+                  }],
+      }}
+
+      componentDidMount() {
+        axios.get('/user/afficher')
+            .then(res => {
+                this.setState({ tableusers: res.data });
+                console.log(res.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        axios.get('/expert/afficher')
+            .then(res => {
+                this.setState({ tableexperts: res.data });
+                console.log(res.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        axios.get('/reclamation/afficher')
+            .then(res => {
+                this.setState({ tableReclamations: res.data });
+                console.log(res.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+           axios.get('/categorie/afficher')
+            .then(res => {
+                this.setState({ tableCateg: res.data });
+                console.log(res.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+          }
+  render() {
+
+    const {Nb} = this.state;
+    const nbMale=()=>{
+      let nb=0;
+  for (const [i,user] of this.state.tableusers.entries()) {
+    if(user.Genre==='Homme')
+        nb++;
+  }
+  return nb;
+}
+
   return (
     <>
     <Sidebar/>
@@ -30,9 +123,9 @@ function HomePage() {
         <Card>
           <Statistic
             title="Nombre d'utilisateurs"
-            value={167}
+            value={this.state.tableusers.length}
             valueStyle={{ color: '#3f8600' }}
-            prefix={<UserOutlined />}
+            prefix={<FaUserAlt />}
           />
         </Card>
       </Col>
@@ -40,9 +133,9 @@ function HomePage() {
         <Card>
           <Statistic
             title="Nombre d'Experts"
-            value={1}
+            value={this.state.tableexperts.length}
             valueStyle={{ color: '#3f8600' }}
-            prefix={<UserOutlined />}
+            prefix={<FaUserNurse />}
           />
         </Card>
       </Col>
@@ -51,48 +144,26 @@ function HomePage() {
     <Col span={12}>
         <Card>
           <Statistic
-            title="Sexe Masculin"
-            value={99}
+            title="Nombre de Reclamations"
+            value={this.state.tableReclamations.length}
             valueStyle={{ color: '#3f8600' }}
-            prefix={<ManOutlined />}
+            prefix={<FaRegAngry />}
           />
         </Card>
       </Col>
       <Col span={12}>
         <Card>
           <Statistic
-            title="Sexe Feminin"
-            value={68}
+            title="Nombre de catégories"
+            value={this.state.tableCateg.length}
             valueStyle={{ color: '#3f8600' }}
-            prefix={<WomanOutlined />}
+            prefix={<FaWallet />}
           />
         </Card>
       </Col>
 
     </Row>
-    <Row gutter={16}  style={{paddingTop:"10px"}}>
-    <Col span={12}>
-        <Card>
-          <Statistic
-            title="age <= 25"
-            value={100}
-            valueStyle={{ color: '#3f8600' }}
-            prefix={<NumberOutlined />}
-          />
-        </Card>
-      </Col>
-      <Col span={12}>
-        <Card>
-          <Statistic
-            title="age >25"
-            value={67}
-            valueStyle={{ color: '#3f8600' }}
-            prefix={<NumberOutlined />}
-          />
-        </Card>
-      </Col>
-
-    </Row>
+  
   </div>
  
   </div>
@@ -101,5 +172,4 @@ function HomePage() {
     </>
   );
 }
-
-export default HomePage;
+}

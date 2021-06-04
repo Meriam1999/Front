@@ -8,6 +8,8 @@
 
 .ChatBox {
     flex: 5.5 ;
+    background-color: #f2f2f2;
+
 }
 .ChatBoxBottom {
     margin-top: 5px ;

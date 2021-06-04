@@ -5,6 +5,7 @@ import TypeWriterEffect from 'react-typewriter-effect';
 import Footer from '../components/Footer/Footer';
 import Sidebar from '../components/NavBar/SideBar2';
 import 'antd/dist/antd.css';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Form, Input, Select, Button, Badge, Card,DatePicker, Space,Modal,notification} from 'antd';
 import moment from 'moment';
 import {SettingTwoTone } from '@ant-design/icons';
@@ -16,6 +17,23 @@ const { Option } = Select;
 const onFinish = (values) => {
   console.log('Received values of form: ', values);
 };
+const { confirm } = Modal;
+
+function showConfirm() {
+  confirm({
+    title: 'Suppression Compte VmedicTn',
+    icon: <ExclamationCircleOutlined />,
+    content: 'Est-ce Que vous êtes sure de vouloir Nous quittez?',
+    onOk() {
+       return new Promise((resolve, reject) => {
+        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+      }).catch(() => console.log('Oops errors!'));
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+  });
+}
 function handleChange(value) {
   console.log(value); // { value: "lucy", key: "lucy", label: "Lucy (101)" }
 }
@@ -228,14 +246,14 @@ const ModifProfile=()=>{
                }} />
                     </Space>
                 </Form.Item>
-                <div style={{marginLeft:"170px",display:"inline-flex",flexDirection:"row"}}>
+                <div style={{marginLeft:"240px",display:"inline-flex",flexDirection:"row"}}>
                   <Form.Item >
-                  <Button type="primary" htmlType="submit" onClick={handleSubmit}>
+                  <Button type="primary" htmlType="submit" onClick={handleSubmit} style={{width:"150px"}}>
                     Enregistrer
                   </Button>
                 </Form.Item>
                  <Form.Item >
-                  <Button type="primary" htmlType="reset" onClick={handleResetData}>
+                  <Button type="primary" htmlType="reset" onClick={handleResetData} style={{width:"150px"}}>
                     Annuler
                   </Button>
                 </Form.Item>
@@ -330,14 +348,14 @@ const ModifProfile=()=>{
         <Input.Password />
       </Form.Item>
 
-      <div style={{marginLeft:"170px",display:"inline-flex",flexDirection:"row"}}>
+      <div style={{marginLeft:"240px",display:"inline-flex",flexDirection:"row"}}>
                   <Form.Item >
-                  <Button type="primary" htmlType="submit" onClick={handleSubmit2}>
+                  <Button type="primary" htmlType="submit" onClick={handleSubmit2} style={{width:"150px"}}>
                     Enregistrer
                   </Button>
                 </Form.Item>
                  <Form.Item >
-                  <Button type="primary" htmlType="reset" onClick={handleResetData2}>
+                  <Button type="primary" htmlType="reset" onClick={handleResetData2} style={{width:"150px"}}>
                     Annuler
                   </Button>
                 </Form.Item>
@@ -347,6 +365,22 @@ const ModifProfile=()=>{
          </Card>
          </Badge.Ribbon>
          </div>
+
+           <div style={{marginTop:"20px",marginLeft:"230px",marginBottom:"20px",fontWeight:"bold"}}>
+            <Badge.Ribbon text="Suppression du Compte VmedicTn" placement="start">
+              <Card  style={{width:"800px",backgroundColor:"#f2f2f2"}}>
+               <div style={{marginTop:"30px"}}>
+                  <Form  className="FormModifProfile" {...formItemLayout}>
+                  <center><span> Voulez-Vous Supprimer Votre Compte VmedicTn ?</span></center>
+                    <Form.Item>
+                      <Button type="primary" style={{width:"300px",marginLeft:"230px",marginTop:"20px" , backgroundColor:"#ff9999" , borderColor:"#ff4d4d"}} onClick={showConfirm}> Supprimer Mon Compte </Button>
+                      </Form.Item>
+                   
+                  </Form>
+              </div>
+              </Card>
+             </Badge.Ribbon>
+          </div>
     <Footer/>
     </>
   );

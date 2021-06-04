@@ -41,6 +41,9 @@ margin-left: 320px;
 .MuiGrid-root.MuiGrid-container.MuiGrid-justify-xs-flex-end{
     margin-left:-60px;
 }
+.ant-pagination.ant-table-pagination.ant-table-pagination-right{
+    margin-right: 550px;
+}
 
 .MuiGrid-root .MuiGrid-container{
     margin-top: 20px;
@@ -49,4 +52,21 @@ margin-left: 320px;
 .MuiFormControlLabel-root{
     margin-top: 20px;
     margin-bottom: 20px;
+}
+div#demo-controlled-open-select.MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiInputBase-input.MuiInput-input{
+    
+    width: 170px;
+    margin-top: 10px;
+}
+
+.containerr{
+width: 1000px;
+
+}
+div.MuiGrid-root.MuiGrid-item{
+    margin-top: 20px;
+}
+
+.Logo{
+    margin-top: -75px;
 }

@@ -15,6 +15,10 @@
     margin-right:25px;
     border-radius: 3px;
 }
+
+#logout{
+    width: 157px;
+}
 .searchBar{
     outline: none;
     border:none;

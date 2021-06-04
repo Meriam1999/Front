@@ -53,11 +53,7 @@ export const SidebarData = [
       },
     ]
   },
-  {
-    title: 'Mes Favoris',
-    path: '/favoris',
-    icon: <AiFillHeart/>
-  },
+  
   {
     title: 'Support',
     path: '/support',

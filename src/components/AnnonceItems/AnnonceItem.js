@@ -6,6 +6,8 @@ import React, { useState } from "react";
 import { Popconfirm, message} from 'antd';
 import ShareButtons from '../Button/ShareButton';
 import { Card } from 'antd';
+import { Switch } from 'antd';
+import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import LikeButton from "../Button/LikeButton";
 import './AnnonceItem.css';
 import { QuestionCircleOutlined } from '@ant-design/icons';
@@ -14,6 +16,7 @@ import moment from 'moment';
 import 'antd/dist/antd.css';
 import './index.css';
 import { TagTwoTone, EnvironmentTwoTone , SmileOutlined}from '@ant-design/icons';
+import axios from 'axios';
 
 
 const { TextArea } = Input;
@@ -163,6 +166,13 @@ const styledrawer={
         });
       }
 
+      const openNotificationsucces = (placement,message) => {
+    notification.success({
+      message,
+      placement,
+    });
+  };
+
 
   /*********************************************************************** */
 const AnnonceItem = (props) => {
@@ -205,7 +215,8 @@ const handleresetMessage=()=>{
     setVisibleClick(true);
   };
 
-  const [reclamation , setReclamation] = useState(false);
+  const [reclamation , setReclamation] = useState("");
+  const [titreReclamation,setTitreReclamation]=useState("");
   const validReclamation=()=>{
     if(reclamation)
     return true;
@@ -215,18 +226,27 @@ const handleresetMessage=()=>{
 
   const handleResetReclamation =()=>{
    setReclamation("");
-   console.log("supprime")
+   console.log("supprimee")
    return true; 
   }
 
    const handleValidReclamation= (event) => {
     event.preventDefault();
+    const Rec={
+      Titre_reclamation:titreReclamation,
+      Contenu:reclamation
+    }
     if(validReclamation()){
-      info1();
-
-    }else{
-      info3();
-
+      axios.post('/reclamation/ajouter',Rec)
+      .then((res) => {
+         openNotificationsucces('bottomRight','Votre réclamations envoyée à notre administrateur pour la traiter! ');
+                console.log("Reclamation Ok ")
+                console.log(res.data)
+    }).catch((error) => {
+                console.log(error.response)
+            });
+           } else{
+       console.log(" Echec Reclamation ")
     }
   }
    /*******Drawer **********/
@@ -299,7 +319,7 @@ const handleresetMessage=()=>{
               <center><AnnonceComment /></center>
              
               <center><ShareButtons/></center>
-              <div style={{marginLeft:"730px" ,display:"inline-flex",flexDirection:"row"}}><Popconfirm title="êtes-vous sûr de vouloir supprimer cette annonce ?" icon={<QuestionCircleOutlined style={{ color: 'red' }} />}>
+              <div style={{marginLeft:"670px" ,display:"inline-flex",flexDirection:"row"}}><Popconfirm title="êtes-vous sûr de vouloir supprimer cette annonce ?" icon={<QuestionCircleOutlined style={{ color: 'red' }} />}>
                 <a  href="#">supprimer</a>
               </Popconfirm>
                <Popover
@@ -308,6 +328,9 @@ const handleresetMessage=()=>{
                   trigger="click"
                   content={<> <Form>
                                 <Form.Item name="reclamation">
+                                   <Input  placeholder="Titre reclamation?"  onChange={(event)=>{
+                              setTitreReclamation(event.target.value)
+                                }}/> 
                                <Input  placeholder="pourquoi Reclamez-vous cette annonce?"  onChange={(event)=>{
                               setReclamation(event.target.value)
                                 }}/> 
@@ -321,6 +344,9 @@ const handleresetMessage=()=>{
                   onVisibleChangeClick={handleVisibleChange}
         
                 > <a href="#">Reclamer</a></Popover>
+               
+                 <Switch checkedChildren="Resolue" unCheckedChildren="Disponible" style={{marginLeft:"10px"}}  onChange/>
+                 
                </div>
            </div>
         </div>

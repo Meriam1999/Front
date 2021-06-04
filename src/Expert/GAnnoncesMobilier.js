@@ -10,54 +10,36 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 
 
-const data = [
-  {
-    key: '1',
-    Titre:' bouteile oxygene oxygene',
-    Description:'Quid enim tam absurdum quam delectari multis inanimis reus.',
-    type:'offre payant/gratuit',
-    Gouvernorat:'Monastir',
-    Ville:'Sayada',
-    DateAnnonce: '03/05/2021',
-    Prix:'20',
-    imageDefaut:'',
-    images:'',
-    Etat:['En_Attente_Expert']
-  },
-  {
-    key: '2',
-    Titre:'oxygene',
-    Description:'ost haec Gallus Hierapolim profecturus ut exetur aerumransferri conterminis, sed consularem Syriae Theophilum prope adstantem ultima metuenti multitudini dedit id adsidue replicando ',
-    type:'offre payant/gratuit',
-    Gouvernorat:'Monastir',
-    Ville:'Sayada',
-    DateAnnonce: '03/05/2021',
-    Prix:'20',
-    imageDefaut:'',
-    images:'',
-    Etat:['En_Attente_Expert']
-  },
-  {
-    key: '3',
-    Titre:'oxygene',
-    Description:'Bouteille oxygene a 300ml hihikikilililolo bksdjgkfjg',
-    type:'offre payant/gratuit',
-    Gouvernorat:'Monastir',
-    Ville:'lamta',
-    DateAnnonce: '03/05/2021',
-    Prix:'20',
-    imageDefaut:'',
-    images:'',
-    Etat:['Validé_Expert']
-  },
-];
 
 export default class GAnnoncesMobilier extends React.Component {
   state = {
     searchText: '',
     searchedColumn: '',
+    tableData: [{
+                      _id:'',
+                      Titre:'',
+                      Description:'',
+                      Gouvernorat:'',
+                      Ville:'',
+                      Etat1Anononce:[''],
+                      Etat2Anononce:[''],
+                      Prix:'',
+                      Photo_annonce:'',
+                      Date_Annonce:'',
+                      TypeAnnonce:[''],
+                      Tags:[{
+                        _id:'',
+                        Contenu:['']
+                      }],
+                      Image:[{
+                         _id:'',
+                        CodeBase64:''
+                      }],
+                }],
   };
 
+
+  /*********************Recherche****************** */
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
@@ -137,6 +119,8 @@ export default class GAnnoncesMobilier extends React.Component {
   };
 
   render() {
+    const { Annonce }= this.state;
+
    const columns = [
  
  {
@@ -242,7 +226,7 @@ export default class GAnnoncesMobilier extends React.Component {
             text="Gestion Des Annonces Mobilier Medicales"
             typeSpeed={100}
           />
-    <Table  style={{marginTop:"25px",width:"100%" }}columns={columns} dataSource={data} />
+    <Table  style={{marginTop:"25px",width:"100%" }}columns={columns} dataSource={Annonce} />
     </div>
     <Footer/>
     </>
