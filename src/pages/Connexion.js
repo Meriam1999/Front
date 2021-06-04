@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from 'axios';
 import {
   Avatar,
@@ -17,11 +17,12 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import authService from "../service/authService";
+import { AuthContext } from '../Context/AuthContext';
 import './style.css';
 import 'react-slideshow-image/dist/styles.css';
 import { Slide } from 'react-slideshow-image';
 
-import { useAuth } from '../Context/AuthContext';
+
 // import { set } from "mongoose";
 
 
@@ -86,7 +87,7 @@ export default function SignInSide(props) {
   const [error, setError] = React.useState({ Email: "", Motdepasse1: "" });
   const [Email, setemail] = useState("");
   const [Motdepasse1, setMotdepasse1] = useState("");
-  const { login } = useAuth();
+  const authContext=useContext(AuthContext);
   const history = useHistory();
 
   const valideConnex = () => {
@@ -102,8 +103,14 @@ export default function SignInSide(props) {
       Email: Email,
       Mot_de_passe: Motdepasse1
     }
-    axios.post('http://localhost:4000/user/authentification', data)
-      .then((res) => { console.log(res.data) })
+    axios.post(`http://localhost:4000/user/authentification`, data)
+      .then((res) => { console.log(res.data) 
+      localStorage.setItem('userId', res.data.userId);
+      localStorage.setItem('token', res.data.token);
+      const id=res.data.userId;
+      const token=res.data.token;
+       authContext.setAuth({id,token})
+      })
 
   }
   const handleChange = (property, event) => {

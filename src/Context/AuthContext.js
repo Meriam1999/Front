@@ -1,43 +1,26 @@
-import React, { useState, useEffect, createContext } from 'react'
-import axios from 'axios';
-import { StylesProvider } from '@material-ui/styles';
-import SelectInput from '@material-ui/core/Select/SelectInput';
+import React, {useState, useEffect} from 'react'
 
-const AuthContext = createContext();
-const sleep = milliseconds => { return new Promise(resolve => setTimeout(resolve, milliseconds)) };
 
-function AuthContextProvider(props) {
-    const [loggedIn, setLoggedIn] = useState(false);
+export const AuthContext=React.createContext();
+export  function AuthProvider(props){
+    const [auth, setAuth]=useState({
+      
+    });
 
-    const login = () => {
-        sleep(1000).then(() => setLoggedIn(true));
-    }
 
-    const logout = () => {
-        sleep(1000).then(() => setLoggedIn(false));
-    }
-    // async function getLoggedIn() {
-    //     const loggedInRes = await axios.get('/user/loggedIn');
-    //     setLoggedIn(loggedInRes.data)
-    // }
+    useEffect (()=>{
+        const id=localStorage.getItem('userId');
+     
+        const token=localStorage.getItem('token');
 
-    useEffect(() => {
-        // localStorage.getItem('userId');
-        // localStorage.getItem('token');
-    }, []);
+        if(id){
+            setAuth({id,token});
+        }
+    }, [])
 
-    const AuthContextValue = {
-        login,
-        loggedIn,
-        logout
-    };
-    return (<AuthContext.Provider value={AuthContextValue} >
-        {props.children}
-    </AuthContext.Provider>
-    );
+    return(
+        <AuthContext.Provider value={{auth, setAuth}}>
+            {props.children}
+        </AuthContext.Provider>
+    )
 }
-
-const useAuth = () => React.useContext(AuthContext)
-
-export default AuthContext;
-export { AuthContextProvider, useAuth };

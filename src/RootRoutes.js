@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import AboutUs from './pages/aboutUs';
-import UserProfile from './pages/userprofile';
+import ProfileUser from './pages/userprofile';
 import Home from './pages/Home';
 
 const redirectRoute = [

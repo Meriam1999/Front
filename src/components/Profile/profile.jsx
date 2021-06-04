@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function Profile() {
+export default function Profile(props) {
   const classes = useStyles();
 
   return (
@@ -51,7 +51,7 @@ export default function Profile() {
         />
         <div style={{marginTop:"10px"}} className={classes.content}>
           <Typography  component="h1" variant="h4">
-            Nom Prenom
+            {props.nom + ' ' + props.prenom}
           </Typography>
           <p style={{color:"grey",marginRight:"75px"}} > 3 publications</p>
           <Link to='/publierannonce'>  <Button style={{marginTop:"10px"}} to="/publierannonce" variant="outlined" color="primary" fullWidth>

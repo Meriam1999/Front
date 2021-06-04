@@ -43,7 +43,7 @@ export default class Guser extends React.Component {
   }
   /*****************Recuperation des utilisateurs de la base de donnees**********/
   componentDidMount() {
-    axios.get('/user/afficher')
+    axios.get('http://localhost:4000/user/afficher')
       .then(res => {
         this.setState({ tableData: res.data });
         console.log(res.data)

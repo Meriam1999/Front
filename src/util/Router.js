@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
 
-import Userprofile from '../pages/userprofile';
+import ProfileUser from '../pages/userprofile';
 import Chat from '../pages/Chat/Chat2';
 import AboutUs from '../pages/aboutUs';
 import Connexion from '../pages/Connexion';
 import Inscri from '../pages/Inscri';
 import PublierAnnonce from '../pages/PublierAnnonce';
 import AdminHomePage from '../administrateur/homepage';
-import { BrowserRouter as Routers, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Routers, Switch, Route,Redirect  } from 'react-router-dom';
 import Gexpert from '../administrateur/GExpert';
 import ExpertHomePage from '../Expert/Homepage';
 import Guser from '../administrateur/GUser';
 import Gcatego from '../administrateur/GCategorie';
 import GReclamation from '../administrateur/GReclamation';
-import { Redirect } from 'react-router';
+
 import ProductList from '../pages/ProducList';
 import Gordonnances from '../Expert/GOrdonnances';
 import GannoncesMedic from '../Expert/GAnnoncesMedicament';
@@ -27,28 +27,43 @@ import HomePageV from '../pages/Sous-pages/AnnonceVente';
 import HomePageR from '../pages/Sous-pages/AnnonceRecherche';
 import modifProfile from '../pages/ModifProfile';
 import page404 from '../pages/page404';
-import { useAuth } from '../Context/AuthContext';
+import { AuthContext } from '../Context/AuthContext';
 
 export default function Router() {
-
-    const { loggedIn } = useAuth();
-
+ const authContext=useContext(AuthContext);
+  
 
     return (
         <Routers>
             <Switch>
-                {/********internaute  *******/}
-                <Route path="/" exact component={HomePageV} />
-                {/********Utilisateur  *******/}
+               
 
-                {/* {loggedIn === false && <> */}
-                <Route path='/connexion' component={Connexion} />
+            {authContext.auth.id?
+                
+            <Route path="/" exact component={HomePageV} />:
+            <Route path="/" exact component={Connexion} />
+            }
+       
+   
+                <Route path='/connexion' component={Connexion} />:
+      
+
+       
+              
                 <Route path='/inscription' component={Inscri} />
-                {/* </>
-                }
-                {loggedIn === true && <> */}
-                <Route path="/accueil/VenteRecherche" component={HomePageR} />
-                <Route path='/profile/' component={Userprofile} />
+             
+
+        <Route  path='/profile/' component={ProfileUser} />:
+   
+        
+
+              
+         <Route path="/accueil/VenteRecherche" component={HomePageR} />
+           
+      
+                  
+         
+               
                 <Route path='/profil/parametres' component={modifProfile} />
                 <Route path='/Chat' component={Chat} />
                 <Route path='/publierannonce' component={PublierAnnonce} />

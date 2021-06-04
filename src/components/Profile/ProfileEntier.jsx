@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Login() {
+export default function Login(props) {
   const classes = useStyles();
 
   return (
@@ -42,7 +42,7 @@ export default function Login() {
         <CssBaseline />
         <Grid item xs={12} sm={8} md={3} component={Paper} elevation={6} square>
           <div  className={classes.paper}>
-            <Profile />
+            <Profile  />
           </div>
         </Grid>
         <Grid style={{display:"flex", flexDirection:"row", position:"relative" , margin:"50px 0 45px" ,justifyContent: "right"}} >

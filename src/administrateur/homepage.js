@@ -57,7 +57,7 @@ export default class HomePage extends React.Component {
       }}
 
       componentDidMount() {
-        axios.get('/user/afficher')
+        axios.get('http://localhost:4000/user/afficher')
             .then(res => {
                 this.setState({ tableusers: res.data });
                 console.log(res.data)

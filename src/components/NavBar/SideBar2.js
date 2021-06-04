@@ -14,7 +14,8 @@ import { Input, Avatar } from 'antd';
 import '../Button/Button.css';
 import './Navbar.css';
 import ButtonLogOut from "../Button/ButtonLogOut";
-import { useAuth } from '../../Context/AuthContext';
+import { AuthContext, AuthProvider } from '../../Context/AuthContext';
+
 import axios from 'axios'
 
 const Nav = styled.div`
@@ -56,8 +57,12 @@ const { Search } = Input;
 const Sidebar = () => {
 
   /******Partie authentification *******/
-
-  const { loggedIn } = useAuth();
+  const authContext=useContext(AuthContext);
+  
+  let loggedIn=false;
+  if(authContext.auth.id){
+    loggedIn=true;
+  }
   console.log(loggedIn)
   // return loggedIn ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />;
 
@@ -68,10 +73,11 @@ const Sidebar = () => {
   const [button, setButton] = useState(true);
   const showSidebar = () => setSidebar(!sidebar);
 
-  const { logout } = useAuth();
+  const { logout } = false
   async function handleLogOut() {
-    await axios.get("http://localhost:4000/user/deconnexion")
-    logout();
+    localStorage.removeItem('userId');
+    localStorage.removeItem('token')
+    window.location.reload(false);
   }
 
   const showButton = () => {
