@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
@@ -9,8 +9,8 @@ import { IconContext } from 'react-icons/lib';
 import 'antd/dist/antd.css';
 import { Input, Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-
-
+import ButtonLogOut from "../Button/ButtonLogOut";
+import { AuthContext, AuthProvider } from '../../Context/AuthContext';
 
 import '../Button/Button.css';
 import './Navbar.css';
@@ -56,8 +56,20 @@ const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false);
   const [button, setButton] = useState(true);
   const showSidebar = () => setSidebar(!sidebar);
+  const authContext = useContext(AuthContext);
+  let loggedIn = false;
+  if (authContext.auth.id) {
+    loggedIn = true;
+  }
+  console.log(loggedIn)
+  async function handleLogOut() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('token')
+    localStorage.removeItem('nom');
+    localStorage.removeItem('role')
+    window.location.href = "http://localhost:3000/";
+  }
 
-  const isLogin = localStorage.getItem("user") === "isLogin";
   const showButton = () => {
     if (window.innerWidth <= 960) {
       setButton(false);
@@ -74,22 +86,14 @@ const Sidebar = () => {
       <IconContext.Provider value={{ color: '#fff' }}>
         <Nav>
           <ul style={{ display: "inline-block" }}>
-
-            <li> <Link to="#"><Avatar size="large" icon={<UserOutlined />} style={{
-              color: '#2eb82e',
-              backgroundColor: " #c2f0c2",
-              position: "absolute",
-              right: "20px",
-              top: "20px",
-            }}
-            >
-
-            </Avatar> </Link></li>
+            {loggedIn === true && (<>
+              <li> {button && <ButtonLogOut style={{ marginRight: "300px" }} buttonStyle='btn--outline' onClick={handleLogOut} > Déconnexion </ButtonLogOut>}</li>
+            </>)}
           </ul>
           <NavIcon to='#'>
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
-          <Link to="/expert/Acceuil"> <span className="EmedTn"> <b>VmedicTn</b> <img style={{ width: "90px", height: "90px", paddingRight: "40px" }} src="../logo.png" /></span></Link>
+          <Link to="/expert/Accueil"> <span className="EmedTn"> <b>VmedicTn</b> <img style={{ width: "90px", height: "90px", paddingRight: "40px" }} src="../logo.png" /></span></Link>
 
         </Nav>
         <SidebarNav sidebar={sidebar}>

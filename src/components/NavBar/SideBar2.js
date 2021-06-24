@@ -1,20 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import { SidebarData } from './SidebarData2';
+import { useHistory } from "react-router-dom";
+
+import { SidebarData, } from './SidebarData2';
 import SubMenu from './SubMenu';
 import { WechatOutlined, BellFilled, UserOutlined } from '@ant-design/icons';
 import { IconContext } from 'react-icons/lib';
 import { Button } from '../Button/Button';
 import { Button2 } from '../Button/Button2';
 import 'antd/dist/antd.css';
-import { Input, Avatar } from 'antd';
+import { Input, Avatar, Badge } from 'antd';
 import '../Button/Button.css';
 import './Navbar.css';
+import AnnonceItem from "../AnnonceItems/AnnonceItem";
 import ButtonLogOut from "../Button/ButtonLogOut";
 import { AuthContext, AuthProvider } from '../../Context/AuthContext';
+// import Search from "../SearchBar/SearchBar";
 
 import axios from 'axios'
 
@@ -53,22 +57,59 @@ const SidebarNav = styled.nav`
 const SidebarWrap = styled.div`
   width: 100%;
 `;
-const { Search } = Input;
 const Sidebar = () => {
 
+  /***************Partie Recherche *********/
+  const { Search } = Input;
+  const history = useHistory();
+
+  const [data, setData] = useState([])
+  const routeChange = () => {
+
+    history.push('/recherche');
+  }
+  const [keyword, setKeyword] = useState("")
+  const authContext = useContext(AuthContext);
+  const [input, setInput] = useState('');
+  const [annonceListDefault, setAnnonceListDefault] = useState();
+  const [annonceList, setAnnonceList] = useState();
+
+  const fetchData = async () => {
+    return axios.get('http://localhost:4000/annonce/afficher')
+      .then(res => {
+        setAnnonceListDefault(res.data);
+        setAnnonceList(res.data)
+        console.log(res.data)
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+  const updateInput = async () => {
+    const filtered = annonceListDefault.filter(annonce => {
+      return annonce.Titre.toLowerCase().includes(keyword.toLowerCase())
+    })
+    setInput(keyword);
+    setAnnonceList(filtered);
+
+    authContext.Recherche(annonceList)
+    console.log("context", authContext.recherche)
+  }
+
+  useEffect(() => { fetchData() }, []);
+
+
   /******Partie authentification *******/
-  const authContext=useContext(AuthContext);
-  
-  let loggedIn=false;
-  if(authContext.auth.id){
-    loggedIn=true;
+
+  let loggedIn = false;
+  if (authContext.auth.id) {
+    loggedIn = true;
   }
   console.log(loggedIn)
   // return loggedIn ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />;
 
 
   /******************** */
-
   const [sidebar, setSidebar] = useState(false);
   const [button, setButton] = useState(true);
   const showSidebar = () => setSidebar(!sidebar);
@@ -77,7 +118,9 @@ const Sidebar = () => {
   async function handleLogOut() {
     localStorage.removeItem('userId');
     localStorage.removeItem('token')
-    window.location.reload(false);
+    localStorage.removeItem('nom');
+    localStorage.removeItem('role')
+    window.location.href = "http://localhost:3000/";
   }
 
   const showButton = () => {
@@ -90,26 +133,41 @@ const Sidebar = () => {
   };
 
   window.addEventListener('resize', showButton);
-  const { Search } = Input;
-  const onSearch = value => console.log(value);
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
         <Nav>
           <ul style={{ display: "inline-block" }}>
-            {loggedIn === false && (<> <li>{button && <Button /*onClick={()=>{setButton(false)}}*/ buttonStyle='btn--outline'> Connectez-vous </Button>}</li>
+            {loggedIn === false && (<> <li>{button && <Button buttonStyle='btn--outline'> Connectez-vous </Button>}</li>
             </>)}
 
-            <li>{button && <Button2  /*onClick={()=>{setButton(false)}}*/ buttonStyle='btn--outline'> Publier une Annonce </Button2>}</li>
+            <li>{button && <Button2 buttonStyle='btn--outline'> Publier une Annonce </Button2>}</li>
 
             {loggedIn === true && (<>
               <li> {button && <ButtonLogOut buttonStyle='btn--outline' onClick={handleLogOut} > Déconnexion </ButtonLogOut>}</li>
-              <li> <Link to="/Chat"><WechatOutlined className="Message" /></Link></li>
+              <li> <Link to="/Chat"> <WechatOutlined className="Message" /> </Link></li>
               <li> <Link to="/"><BellFilled className="Message1" dot /></Link></li>
-              <li> <Link to="/profile"><Avatar className="Avatar" icon={<UserOutlined />} /></Link> </li>
+              <li> <Link
+                to={{
+                  pathname: `/profile/${authContext.auth.id}`
+                }}
+              ><Avatar className="Avatar" icon={<UserOutlined />} /></Link> </li>
             </>)}
 
-            <li><Search className="searchBar" placeholder="input search text" onSearch={onSearch} style={{ width: "240px", borderRadius: "4px" }} /> </li>
+            <li>   <Search className="searchBar"
+
+              onSearch={routeChange}
+              key="random1"
+              placeholder="Que cherchez-vous?"
+              value={keyword}
+              onChange={(event) => {
+                updateInput();
+                setKeyword(event.target.value);
+                console.log(keyword)
+
+              }}
+              /*onSearch={handleSearch}*/
+              style={{ width: "240px", borderRadius: "4px" }} /></li>
           </ul>
 
           <NavIcon to='#'>

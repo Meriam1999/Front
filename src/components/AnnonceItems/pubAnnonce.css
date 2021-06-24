@@ -34,8 +34,12 @@ margin-left:12px;
 margin-left: 70px;
 }
 
-
 .FormRecherche .ant-form-item-explain.ant-form-item-explain-error div{
 margin-left: 10px;
 }
+#upload .ant-upload.ant-upload-select.ant-upload-select-picture-card{
+        margin-left:-24px;
+
+} 
+
 

@@ -13,13 +13,15 @@ import {
 } from "@material-ui/core";
 
 import { useHistory } from "react-router-dom";
-
+import Footer from '../components/Footer/Footer';
+import Sidebar from '../components/NavBar/SideBar2';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { notification } from 'antd';
+import { GoogleLogin } from 'react-google-login';
 
 
 const openNotificationsucces = (placement, message) => {
@@ -127,16 +129,20 @@ export default function SignUp(props) {
     };
 
     if (valideinscri()) {
-      axios.post('/user/ajouter', NvUtilisateur)
+      axios.post(`http://localhost:4000/user/ajouter`, NvUtilisateur)
         .then((res) => {
           openNotificationsucces('bottomRight', 'inscription effectuée avec succès , Veuillez vous Connectez ');
           console.log("ajout utilisateur avec succes ")
           console.log(res)
-
+          setTimeout(() => {
+            history.push("/connexion")
+          }, 2000)
         }).catch((error) => {
+          openNotificationerror('bottomRight', 'Cet Email est deja utilisè , veuillez vèrifier les donneès saisies ! ');
           console.log(error.response);
         });
-      history.push("/connexion");
+
+
     } else {
       openNotificationwarning('bottomRight', 'Veuillez Remplir tous les Champs avec des informations valides SVP!');
     }
@@ -229,63 +235,71 @@ export default function SignUp(props) {
   };
 
 
-
+  const googleSuccess = (res) => {
+    console.log(res)
+  }
+  const googleFailure = () => {
+    console.log("google sign in was unsuccefful")
+  }
   return (
-    <Container style={{ paddingBottom: "50px", marginTop: "-40px", borderColor: "grey" }} component="main" maxWidth="xs" >
-      <CssBaseline />
-      <div className={classes.paper}>
-        <img style={{ width: "120px", height: "120px", paddingRight: "5px", marginBottom: "-25px" }} src="../logo.png" />
-        <Typography component="h1" variant="h5">
-          Inscription
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="nom"
-                variant="outlined"
-                value={data.nom}
-                onChange={handleChange}
-                error={dataErrors.nomError ? true : false}
-                helperText={dataErrors.nomError}
-                id="Nom"
-                fullWidth
-                autoFocus
-                label="Nom"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                value={data.prenom}
-                onChange={handleChange}
-                error={dataErrors.prenomError ? true : false}
-                helperText={dataErrors.prenomError}
-                id="Prenom"
-                label="Prenom"
-                name="prenom"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                variant="outlined"
-                onChange={handleChange}
-                fullWidth
-                value={data.identifiant}
-                error={dataErrors.identifiant}
-                helperText={dataErrors.identifiant}
-                id="identifiant"
-                label="Nom d'utilisateur"
-                name="identifiant"
-              />
-            </Grid>
+    <>
+      <Sidebar />
+      <Container style={{ paddingBottom: "50px", marginTop: "-40px", borderColor: "grey" }} component="main" maxWidth="xs" >
 
-            {/* <Grid item xs={12} sm={6}> */}
-            {/* <TextField
+        <CssBaseline />
+        <div className={classes.paper}>
+          <img style={{ width: "120px", height: "120px", paddingRight: "5px", marginBottom: "-25px" }} src="../logo.png" />
+          <Typography component="h1" variant="h5">
+            Inscription
+          </Typography>
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="nom"
+                  variant="outlined"
+                  value={data.nom}
+                  onChange={handleChange}
+                  error={dataErrors.nomError ? true : false}
+                  helperText={dataErrors.nomError}
+                  id="Nom"
+                  fullWidth
+                  autoFocus
+                  label="Nom"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={data.prenom}
+                  onChange={handleChange}
+                  error={dataErrors.prenomError ? true : false}
+                  helperText={dataErrors.prenomError}
+                  id="Prenom"
+                  label="Prenom"
+                  name="prenom"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  variant="outlined"
+                  onChange={handleChange}
+                  fullWidth
+                  value={data.identifiant}
+                  error={dataErrors.identifiant}
+                  helperText={dataErrors.identifiant}
+                  id="identifiant"
+                  label="Nom d'utilisateur"
+                  name="identifiant"
+                />
+              </Grid>
+
+              {/* <Grid item xs={12} sm={6}> */}
+              {/* <TextField
                 variant="outlined"
               onChange={(value)=>{
                   if(value){
@@ -300,115 +314,153 @@ export default function SignUp(props) {
                 
               />   
             </Grid> */}
-            <Grid item xs={12} sm={6}>
-              <Select
+              <Grid item xs={12} sm={6}>
+                <Select
 
-                id="demo-controlled-open-select"
-                open={open1}
-                required
-                name="Sexe"
-                onClose={handleClose1}
-                onOpen={handleOpen1}
-                value={Sexe}
-                onChange={(e) => { setSexe(e.target.value); console.log(e.target.value) }}
-              >
-                <MenuItem value="Femme"> Femme </MenuItem>
-                <MenuItem value="Homme">Homme</MenuItem>
-              </Select>
+                  id="demo-controlled-open-select"
+                  open={open1}
+                  required
+                  name="Sexe"
+                  onClose={handleClose1}
+                  onOpen={handleOpen1}
+                  value={Sexe}
+                  onChange={(e) => { setSexe(e.target.value); console.log(e.target.value) }}
+                >
+                  <MenuItem value="Femme"> Femme </MenuItem>
+                  <MenuItem value="Homme">Homme</MenuItem>
+                </Select>
+              </Grid>
+
+              <Grid item xs={12} >
+                <TextField
+                  variant="outlined"
+                  required
+                  onChange={handleChange}
+                  value={data.numero_telephone}
+                  error={dataErrors.numero_telephoneError ? true : false}
+                  helperText={dataErrors.numero_telephoneError}
+                  fullWidth
+                  id="numero_telephone"
+                  label="numero de telephone "
+                  name="numero_telephone"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  value={data.email}
+                  error={dataErrors.emailError ? true : false}
+                  helperText={dataErrors.emailError}
+                  onChange={handleChange}
+                  fullWidth
+                  id="Email"
+                  label="Adresse E-mail"
+                  name="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  type="password"
+                  variant="outlined"
+                  label="mot de passe"
+                  name="motPasse"
+                  onChange={handleChange}
+                  value={data.motPasse}
+                  error={dataErrors.motPasseError ? true : false}
+                  helperText={dataErrors.motPasseError}
+                  id="Motdepasse1"
+
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  type="password"
+                  onChange={handleChange}
+                  fullWidth
+                  value={data.motPasseConfirme}
+                  error={dataErrors.motPasseConfirmeError ? true : false}
+                  helperText={dataErrors.motPasseConfirmeError}
+                  name="motPasseConfirme"
+                  label="Confirmer votre mot de passe"
+                  id="Motdepasse2"
+                  autoComplete="new-password"
+                />
+              </Grid>
+
+
+
+
             </Grid>
 
-            <Grid item xs={12} >
-              <TextField
-                variant="outlined"
-                required
-                onChange={handleChange}
-                value={data.numero_telephone}
-                error={dataErrors.numero_telephoneError ? true : false}
-                helperText={dataErrors.numero_telephoneError}
-                fullWidth
-                id="numero_telephone"
-                label="numero de telephone "
-                name="numero_telephone"
-              />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleinscrit}
+            >
+              Confirmer
+            </Button>
+            {/* <Button
+              type="reset"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.reset}
+              onClick={resetData}
+            >
+              Annuler
+            </Button> */}
+            <hr style={{ marginBottom: "20px", marginTop: "10px" }} />
+            {/* <GoogleLogin
+              cliendId="363683454329-2eda3nvnadm0vgpl2p98i9h1e73i0mj4.apps.googleusercontent.com"
+              buttonText="Log in with Google"
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy={'single_host_origin'}
+            /> */}
+            {/* <GoogleLogin
+              cliendId="363683454329-2eda3nvnadm0vgpl2p98i9h1e73i0mj4.apps.googleusercontent.com"
+              render={(renderProps) => (
+                <Button className={classes.googleButton}
+                  color='primary'
+                  fullWidth
+                  onClick={renderProps.onClick}
+                  // disabled={renderProps.disabled}
+                  startIcon={<svg style={{ width: '20px', height: '20px' }}
+                    viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"
+                    />
+                  </svg>}
+                  variant="contained"
+                >
+                  Inscription avec Google
+                </Button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy={'single_host_origin'}
+            /> */}
+            {/*  */}
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to="/connexion">vous avez deja un Compte ? Connectez-vous!</Link>
+              </Grid>
             </Grid>
+          </form>
+        </div>
 
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                value={data.email}
-                error={dataErrors.emailError ? true : false}
-                helperText={dataErrors.emailError}
-                onChange={handleChange}
-                fullWidth
-                id="Email"
-                label="Adresse E-mail"
-                name="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                type="password"
-                variant="outlined"
-                label="mot de passe"
-                name="motPasse"
-                onChange={handleChange}
-                value={data.motPasse}
-                error={dataErrors.motPasseError ? true : false}
-                helperText={dataErrors.motPasseError}
-                id="Motdepasse1"
-
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                type="password"
-                onChange={handleChange}
-                fullWidth
-                value={data.motPasseConfirme}
-                error={dataErrors.motPasseConfirmeError ? true : false}
-                helperText={dataErrors.motPasseConfirmeError}
-                name="motPasseConfirme"
-                label="Confirmer votre mot de passe"
-                id="Motdepasse2"
-                autoComplete="new-password"
-              />
-            </Grid>
-
-          </Grid>
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleinscrit}
-          >
-            Confirmer
-          </Button>
-          <Button
-            type="reset"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.reset}
-            onClick={resetData}
-          >
-            Annuler
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link to="/connexion">vous avez deja un Compte ? Connectez-vous!</Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-
-    </Container>
+      </Container>
+      <Footer />
+    </>
   );
 }

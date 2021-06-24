@@ -3,7 +3,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
-import { AiFillHeart} from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 
 export const SidebarData = [
   {
@@ -23,37 +23,37 @@ export const SidebarData = [
     subNav: [
       {
         title: 'Médicaments',
-        path: '/productlist',
+        path: '/medicament',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
         title: 'Mobilier Médicale',
-        path: '/productlist',
+        path: '/MobilerMedicale',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
         title: 'Protection',
-        path: '/productlist',
+        path: '/protection',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
         title: 'Soin et Pansements',
-        path: '/productlist',
+        path: '/SoinPansement',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
         title: 'Autres',
-        path: '/productlist',
+        path: '/autres',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
     ]
   },
-  
+
   {
     title: 'Support',
     path: '/support',

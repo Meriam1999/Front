@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { Redirect } from 'react-router';
-import PicturesWall from '../uploadPic/Uploadpic';
-import Tags from './Tags/Tags';
+import PicturesWall from '../uploadPic/uploadpiccc';
+import { Upload } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
+import Tags from './Tags/Tags';
+import { AuthContext } from '../../Context/AuthContext';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import {
   Form,
@@ -51,16 +55,12 @@ const formItemLayout = {
 
 const normFile = (e) => {
   console.log('Upload event:', e);
-
   if (Array.isArray(e)) {
     return e;
   }
-
   return e && e.fileList;
 };
 
-
-/*************Notre classe ***********/
 export default function Annonce() {
   /*
   ******************************************
@@ -77,9 +77,6 @@ export default function Annonce() {
   const [Ville, setVille] = useState("");
   const [mode, setMode] = useState("");
   const [prix, setPrix] = useState(10);
-  const [tags, setTags] = useState("");
-  const [images, setimages] = useState("");
-
 
   /*
    ******************************************
@@ -87,32 +84,10 @@ export default function Annonce() {
     * ***************************************
     */
 
-  const openNotification = (placement, message) => {
-    notification.info({
-      message,
-      placement,
-    });
-  };
-
-
-  /****
-   * 
-   * 
-   * 1-Tous les champs sont obigatires
-        si categorie === Medicament
-          les dates sont obligatoires
-        sinon si
-  
-  
-   */
-
-
   const validAnnonce = () => {
-    if (titre && categorie && Gouvernorat && Ville && mode && Description && images) {
-      return ((categorie !== "Médicament" || dateExpiration && dateFabrication && Dosage) && (mode === "prix symbolique" && prix !== 0 || mode !== "prix symbolique"))
-
+    if (titre && categorie && Gouvernorat && Ville && mode && Description) {
+      return ((categorie !== "Médicament" || dateExpiration && dateFabrication && Dosage) || (mode === "prix symbolique" && prix !== 0 || mode !== "prix symbolique") || (mode === "Offre Gratuit" || prix === 0))
     }
-
     return false
   }
 
@@ -129,69 +104,123 @@ export default function Annonce() {
     setMode("");
     setVille("");
     setPrix("");
-    setimages("");
     return true
   }
 
+  const history = useHistory();
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+  /**************UPLOAD IMAGES************ */
+  const [state, setState] = useState({ previewVisible: false, previewImage: "", fileList: [] })
+  const handleCancel = () => setState({ previewVisible: false });
+
+  const handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+    });
+  };
+
+  const handleChange = ({ fileList }) => {
+    setState({ fileList });
+    console.log(state.fileList)
+  };
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Ajouter Images</div>
+    </div>
+  );
+  /******************************************** */
+
+  const authContext = useContext(AuthContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-
     console.log(validAnnonce())
-    // const annonce = {
-    //   Titre: titre,
-    //   Description: Description,
-    //   Gouvernorat: Gouvernorat,
-    //   Ville: Ville,
-    //   Prix: prix,
-    //   TypeAnnonce: "Annonce d'offre gratuit /Vente(Prix Symbolique)",
-    //   // Images: {
-    //   CodeBase64: images
-    // },
-    // Tags:{
-    //     Contenu:Tags
-    // }
+
     if (validAnnonce()) {
-      if (categorie === 'Mobilier_Medicale' || categorie === 'Soin_et_Pensement' || categorie === 'Protection' || categorie === 'Autre') {
-        const Nonmedic = {
-          Titre: titre,
-          Description: Description,
-          Gouvernorat: Gouvernorat,
-          Ville: Ville,
-          Image: images,
-          Tags: tags,
-          Prix: prix,
-          Photo_annonce: "lol",
-          TypeAnnonce: "Annonce d'offre gratuit /Vente(Prix Symbolique)",
-          Catégorie: "NonMedicament",
-          TypeNonmedicament: categorie
-        };
-        axios.post('/nonMedicament/ajouter', Nonmedic)
+      if (categorie === 'mobilier medicale' || categorie === 'Soin et Pansement' || categorie === 'Protection' || categorie === 'Autre') {
+        const formData = new FormData();
+        formData.append('userId', authContext.auth.id)
+        formData.append('userName', authContext.auth.nom)
+        formData.append('Titre', titre)
+        formData.append('Description', Description)
+        formData.append('Gouvernorat', Gouvernorat)
+        formData.append('ville', Ville)
+        formData.append('Prix', prix)
+        formData.append('TypeAnnonce', "Annonce d'offre gratuit /Vente(Prix Symbolique)")
+        formData.append('Catégorie', 'NonMedicament')
+        formData.append('TypeNonmedicament', categorie)
+        for (let i = 0; i < state.fileList.length; i++) {
+          formData.append('images', state.fileList[i].originFileObj)
+        }
+        //  console.log(state.fileList[0])
+        for (var key of formData.entries()) {
+          console.log(key[0] + ', ' + key[1]);
+        }
+        const config = {
+          "headers": {
+            "content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
+          }
+        }
+        axios.post(`http://localhost:4000/nonMedicament/ajouter`, formData, config)
           .then((res) => {
             openNotificationsucces('bottomRight', "Votre Annonce est envoyée et est en attente d'approbation par un administrateur")
             console.log("NonMedicament Ajoutee")
-            console.log(res.data)
             console.log(res)
+            // const { fileName, filePath } = res.data.images
+            // setUploadFile({ fileName, filePath })
           }).catch((error) => {
             console.log(" echec Nonmedicament non ajoutee ");
             console.log(error.response)
           });
-      } else {
-        const Medic = {
-          Titre: titre,
-          Description: Description,
-          Gouvernorat: Gouvernorat,
-          Ville: Ville,
-          Prix: prix,
-          Dosage: Dosage,
-          dateFabrication: dateFabrication,
-          dateExpiration: dateExpiration,
-          TypeAnnonce: "Annonce d'offre gratuit /Vente(Prix Symbolique)",
-          Catégorie: "Medicament",
-        };
-        console.log(Medic);
-        axios.post('/medicament/ajouter', Medic)
+        setTimeout(() => {
+          history.push('/')
+        }, 2000)
+      } else if (categorie === 'Médicament') {
+
+        const formData = new FormData();
+        formData.append('userId', authContext.auth.id)
+        formData.append('userName', authContext.auth.nom)
+        formData.append('Titre', titre)
+        formData.append('Description', Description)
+        formData.append('Gouvernorat', Gouvernorat)
+        formData.append('ville', Ville)
+        formData.append('Prix', prix)
+        formData.append('TypeAnnonce', "Annonce d'offre gratuit /Vente(Prix Symbolique)")
+        formData.append('Catégorie', 'NonMedicament')
+        formData.append('TypeNonmedicament', categorie)
+        formData.append('images', authContext.state)
+        // const Medic = {
+        //   userId: authContext.auth.id,
+        //   userName: authContext.auth.Nom,
+        //   Titre: titre,
+        //   Image: myData,
+        //   Description: Description,
+        //   Gouvernorat: Gouvernorat,
+        //   Ville: Ville,
+        //   Prix: prix,
+        //   Dosage: Dosage,
+        //   dateFabrication: dateFabrication,
+        //   dateExpiration: dateExpiration,
+        //   TypeAnnonce: "Annonce d'offre gratuit /Vente(Prix Symbolique)",
+        //   Catégorie: "Medicament",
+
+        // };
+        // console.log(Medic);
+        axios.post(`http://localhost:4000/medicament/ajouter`, formData)
           .then((res) => {
             openNotificationsucces('bottomRight', "Votre Annonce est envoyee et est en attente d'approbation par un administrateur")
             console.log("Medicament Ajoutee")
@@ -202,7 +231,9 @@ export default function Annonce() {
             console.log(error.response)
           });
       }
-
+      // setTimeout(() => {
+      //   history.push('/')
+      // }, 2000)
     } else {
       openNotificationwarning('bottomRight', 'Merci de Remplir Tous les Champs obligatoires!');
       console.log(" Echec Echech ")
@@ -257,9 +288,9 @@ export default function Annonce() {
         >
           <Select placeholder="Selectionnez la Catégorie" value={categorie} style={{ width: "300px", marginLeft: "43px" }} onChange={setCategorie}>
             <Option value="Médicament">Médicament</Option>
-            <Option value="Mobilier_Médicale">Mobilier Médicale</Option>
+            <Option value="mobilier medicale">Mobilier médicale</Option>
             <Option value="Protection">Protection</Option>
-            <Option value='Soin_et_Pensement'>Soin et Pansements</Option>
+            <Option value='Soin et Pansement'>Soin et Pansements</Option>
             <Option value='Autre'>Autre</Option>
           </Select>
         </Form.Item>
@@ -286,7 +317,7 @@ export default function Annonce() {
                       <DatePicker onChange={(value) => {
                         if (value) {
                           const date = new Date(value["_d"]);
-                          setDateFabrication(`${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`);
+                          setDateFabrication(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`);
                         }
                       }} />
                     </Space>
@@ -307,7 +338,7 @@ export default function Annonce() {
                       <DatePicker onChange={(value) => {
                         if (value) {
                           const date = new Date(value["_d"]);
-                          setDateExpiration(`${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`);
+                          setDateExpiration(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`);
                         }
                       }} />
                     </Space>
@@ -361,7 +392,7 @@ export default function Annonce() {
             <Option value="le Kef ">le Kef</Option>
             <Option value="Mahdia">Mahdia</Option>
             <Option value="Medenine">Medenine</Option>
-            <Option value="Monatsir">Monastir</Option>
+            <Option value="Monastir">Monastir</Option>
             <Option value="Nabeul">Nabeul</Option>
             <Option value="Sfax">Sfax</Option>
             <Option value="Sidi Bouzid">Sidi Bouzid</Option>
@@ -403,7 +434,7 @@ export default function Annonce() {
           name="radiogroup" label="mode :" >
           <Radio.Group onChange={(event) => { setMode(event.target.value) }}>
             <Popover content="Vous le Donnez Gratuitement, vous êtes une personne BIENFAISANTE et GÉNÉREUSE " trigger="click">
-              <Radio value="offreGratuit">Offre Gratuit</Radio>
+              <Radio value="Offre Gratuit">Offre Gratuit</Radio>
             </Popover>
             <Popover content="Le prix symbolique n'a rien à voir avec la valeur ou la vraie qualité de votre produit, mais avec vous le vendre généreusement à bas prix pour aider les autres " trigger="click">
               <Radio style={{ marginLeft: "0px" }} value="prix symbolique">prix symbolique</Radio>
@@ -427,7 +458,7 @@ export default function Annonce() {
                 ]}
               >
                 <InputNumber direction="vertical" style={{ marginLeft: "510px" }} className="fleche"
-                  defaultValue={prix}
+                  // defaultValue={prix}
                   formatter={value => `${value} DT`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   parser={value => value.replace(/\$\s?|(,*)/g, '')}
                   onChange={(value) => { setPrix(value >= 0 ? value : 0); }}
@@ -452,14 +483,41 @@ export default function Annonce() {
           <Tags />
         </Form.Item>
 
-        <Form.Item style={{ width: "520px", marginLeft: "45px" }} label="Image" onChange={setimages} >
-          <Form.Item rules={[
-            {
-              required: false,
-              message: 'Veuillez insérer une/des image(s) SVP !',
-            },
-          ]} name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-            <Popover content="3 photos maximum" trigger="hover"> <PicturesWall /></Popover>
+        <Form.Item name="images" style={{ width: "520px", marginLeft: "45px" }} label="Image" >
+          <Form.Item
+            name="images"
+            rules={[
+              {
+                required: false,
+                message: 'Veuillez insérer une/des image(s) SVP !',
+              },
+            ]}
+            name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+            <Popover content="3 photos maximum" trigger="hover">
+              <div>
+                <div>
+                  <Upload
+                    name="images"
+                    accept="image/png, image/jpeg"
+                    listType="picture-card"
+                    fileList={state.fileList}
+                    onChange={handleChange}
+                    onPreview={handlePreview}
+                    beforeUpload={() => false} // return false so that antd doesn't upload the picture right away
+                  >
+                    {state.fileList.length >= 3 ? null : uploadButton}
+                  </Upload>
+
+                  <Modal
+                    visible={state.previewVisible}
+                    footer={null}
+                    onCancel={handleCancel}
+                  >
+                    <img alt="example" style={{ width: "100%" }} src={state.previewImage} />
+                  </Modal>
+                </div>
+              </div>
+            </Popover>
 
           </Form.Item>
         </Form.Item>
@@ -475,10 +533,10 @@ export default function Annonce() {
           }}>
             <Button type="primary" htmlType="submit" style={{ marginRight: "10px", width: "100px", paddingRight: "70px" }} onClick={handleSubmit}  >
               Envoyer
-        </Button>
+            </Button>
             <Button type="primary" htmlType="reset" onClick={handleResetData}>
               Annuler
-        </Button>
+            </Button>
           </Form.Item>
         </Form.Item>
       </Form>

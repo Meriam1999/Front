@@ -1,9 +1,8 @@
 
-import { Upload, Modal,Button } from 'antd'
-import {PlusOutlined} from '@ant-design/icons';
-import React,{useState} from 'react';
+import { Upload, Modal, Button } from 'antd'
+import { PlusOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
 import './style.css';
-
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -15,7 +14,7 @@ function getBase64(file) {
 }
 export default class PicturesWall extends React.Component {
   state = {
-    previewVisible:false,
+    previewVisible: false,
     previewImage: "",
     fileList: []
   };
@@ -30,37 +29,28 @@ export default class PicturesWall extends React.Component {
     this.setState({
       previewImage: file.url || file.preview,
       previewVisible: true,
-      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+      previewTitle: file.url.substring(file.url.lastIndexOf('/') + 1),
     });
   };
 
-  handleUpload = ({ fileList }) => {
-    console.log('fileList', fileList);
-
+  handleChange = ({ fileList }) => {
+    if (this.props.onChange) {
+      this.props.onChange(fileList)
+    }
     this.setState({ fileList });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
+  //  handleChange = ({ fileList }) => this.setState({ fileList }, console.log(fileList));
 
-    let formData = new FormData();
-    // add one or more of your files in FormData
-    // again, the original file is located at the `originFileObj` key
-    formData.append("file", this.state.fileList[0].originFileObj);
 
-    // axios
-    //   .post("http://api.foo.com/bar", formData)
-    //   .then(res => {
-    //     console.log("res", res);
-    //   })
-    //   .catch(err => {
-    //     console.log("err", err);
-    //   });
-  };
+  // handleSubmit = event => {
+  //   event.preventDefault();
+
+  // };
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
-     const uploadButton = (
+    const uploadButton = (
       <div>
         <PlusOutlined />
         <div style={{ marginTop: 8 }}>Ajouter Images</div>
@@ -71,18 +61,12 @@ export default class PicturesWall extends React.Component {
         <Upload
           listType="picture-card"
           fileList={fileList}
+          onChange={this.handleChange}
           onPreview={this.handlePreview}
-          onChange={this.handleUpload}
           beforeUpload={() => false} // return false so that antd doesn't upload the picture right away
         >
-                    {fileList.length >= 3 ? null : uploadButton}
-
+          {fileList.length >= 3 ? null : uploadButton}
         </Upload>
-
-        {/* <Button onClick={this.handleSubmit} // this button click will trigger the manual upload
-        >
-            Submit
-        </Button> */}
 
         <Modal
           visible={previewVisible}

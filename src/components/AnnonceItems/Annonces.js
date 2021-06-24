@@ -1,120 +1,72 @@
-import React from 'react'
+import { useState, useEffect } from 'react';
+import { useParams, useHistory } from "react-router-dom";
 import AnnoncesItem from './AnnonceItem';
 import './AnnonceItem.css';
+import { generatePath } from 'react-router';
 import { Parallax } from 'rc-scroll-anim';
+import axios from "axios"
 
-function Annonces() {
+const Annonces = () => {
+    const [data, setData] = useState([])
+    useEffect(() => {
+        axios.get('http://localhost:4000/annonce/afficher')
+            .then(res => {
+                setData(res.data);
+                console.log(res.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }, [])
+
     return (
         <div className='cards'>
             <div className="cards__container">
                 <div className="cards__wrapper">
-                <Parallax
-          animation={{ x: 0, opacity: 1, playScale: [0.5, 0.8] }}
-          style={{ transform: 'translateX(-100px)', opacity: 0 }}
-          className="cards__items"
-        >
-                    <ul className="cards__items"> 
-                    {/* ce Code est statique , il faut le changer avec la base de donne  */}
-                        <AnnoncesItem
-                        src='assets/images/medi.jpg' 
-                        title='medicaments '
-                        label='Disponible'
-                        desc=' cest la description cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Ariana'
-                        />
-                        <AnnoncesItem
-                        src='assets/images/lit.jpg' 
-                        title='Lit Orthopedique'
-                        label='Disponible'
-                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='tunis'
-                        />
-                        <AnnoncesItem
-                        src='assets/images/chaiseroulante.jpg' 
-                        title='ortho'
-                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        label='Resolue'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Monastir'
-                        />
-                    </ul> 
-                    </Parallax>
-                    <Parallax
-          animation={{ x: 0, opacity: 1, playScale: [0.2, 0.8] }}
-          style={{ transform: 'translateX(-100px)', opacity: 0 }}
-          className="cards__items"
-        >
-                    <ul className="cards__items">
-                        <AnnoncesItem
-                        src='assets/images/medi.jpg' 
-                        title='Disponible'
-                        desc='Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        label='Medicament'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Ariana'
-                       />
-                        <AnnoncesItem
-                        src='assets/images/lit.jpg' 
-                        title='lit ortho'
-                        desc=' cest la description'
-                        label='Resolue'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Ariana'
-                        />
-                        <AnnoncesItem
-                        src='assets/images/chaiseroulante.jpg' 
-                        title='chaise roulante'
-                        desc=' cest la description'
-                        label='Disponible'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Ariana'
-                        />
-                    </ul>
-                    </Parallax>
-                    <Parallax
-          animation={{ x: 0, opacity: 1, playScale: [0.5, 0.8] }}
-          style={{ transform: 'translateX(-100px)', opacity: 0 }}
-          className="cards__items"
-        >
-                    <ul className="cards__items"> 
-                    {/* ce Code est statique , il faut le changer avec la base de donne  */}
-                        <AnnoncesItem
-                        src='assets/images/medi.jpg' 
-                        title='medicaments '
-                        label='Resolue'
-                        desc=' cest la description cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Ariana'
-                        />
-                        <AnnoncesItem
-                        src='assets/images/lit.jpg' 
-                        title='Lit Orthopedique'
-                        label='Disponible'
-                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='tunis'
-                        />
-                        <AnnoncesItem
-                        src='assets/images/chaiseroulante.jpg' 
-                        title='ortho'
-                        desc=' cest la descriptiondesc=Avec cette nouvelle catégorie, La souris qui raconte inaugure une nouvelle façon de dire les choses… enfin de les écrire ! Céline Druon-Petitet est rédactrice, chargée de communication puis libraire pendant un temps. Un jour elle crée « C’était écrit », l’entreprise qui rédige tout ce que vous ne pouvez pas écrire. Rencontrée par une belle journée d’avril, je lui fais part de mon souhait d'
-                        label='Disponible'
-                        username='nada'
-                        moffre='offre volontaire(gratuit)'
-                        lieu='Monastir'
-                        />
-                    </ul> 
-                    </Parallax>
+                    {
+                        data.map((row, index) => {
+                            if (index === 0 || (index % 3 === 0)) {
+
+                                return (<Parallax
+                                    key={index}
+                                    animation={{ x: 0, opacity: 1, playScale: [0.5, 0.8] }}
+                                    style={{ transform: 'translateX(-100px)', opacity: 0 }}
+                                    className="cards__items"
+                                >
+                                    <ul className="cards__items">
+                                        {data.slice(index, index + 3).map((row, index) => {
+                                            return row.Etat1Anononce == "Validé_Expert" && row.TypeAnnonce == "Annonce d'offre gratuit /Vente(Prix Symbolique)" ?
+                                                <>
+                                                    {/* <p>Id: {id}</p> */}
+                                                    <AnnoncesItem
+                                                        path="/annonce"
+                                                        pathBack="/"
+                                                        id={row._id}
+                                                        key={index}
+                                                        src="./assets/images/lit2.jpg"
+                                                        title={row.Titre}
+                                                        label={row.Etat2Anononce}
+                                                        desc={row.Description}
+                                                        dateFab={row.DateFabrication}
+                                                        dateExp={row.DateExpiration}
+                                                        dateAnn={row.Date_Annonce}
+                                                        prix={row.Prix}
+                                                        username={row.userName}
+                                                        iduser={row.userId}
+                                                        moffre="Annonce d'offre gratuit/Vente"
+                                                        lieu={row.Gouvernorat}
+                                                        ville={row.Ville}
+                                                    />
+                                                </>
+                                                : null
+                                        })}
+                                    </ul>
+                                </Parallax>);
+                            } else {
+                                return;
+                            }
+                        })
+                    }
                 </div>
             </div>
         </div>

@@ -6,16 +6,10 @@ import ImageAcceuil from '../../components/ImageAcceuil/ImageAcceuil';
 import Sidebar from '../../components/NavBar/SideBar2';
 import 'antd/dist/antd.css';
 import { BackTop } from 'antd';
-import { useParams } from "react-router-dom";
-
 import { Link } from 'react-router-dom';
 import { Select } from 'antd';
-
+import Search from "../../components/SearchBar/SearchBar"
 const { Option, OptGroup } = Select;
-
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
 
 
 const style = {
@@ -32,18 +26,18 @@ const style = {
 
 
 function HomeV() {
-  const { Nom } = useParams()
+
   return (
     <>
       <Sidebar />
       <ImageAcceuil />
       <div style={{ display: "inline-flex", flexDirection: "row", marginLeft: "500px" }}>
-        <h1> Annonces à la Une {Nom}</h1>
+        <h1> Annonces à la Une </h1>
 
-        <Select defaultValue="Annonces D'offre/Vente" style={{ width: "410px", paddingLeft: "200px", paddingTop: "38px" }}>
-          <OptGroup label="Annonces">
+        <Select defaultValue="Annonces D'offre/Vente" style={{ width: "440px", paddingLeft: "200px", paddingTop: "38px" }}>
+          <OptGroup label="Annonces" >
             <Option value="Annonces D'offre/Vente"> <Link to="/"> Annonces D'offre/Vente</Link></Option>
-            <Option value="Annonces De Recherche"> <Link to="/accueil/VenteRecherche"> Annonces De Recherche</Link></Option>
+            <Option value="Annonces De Recherche"> <Link to="/annonceRecherche/annonce"> Annonces De Recherche</Link></Option>
           </OptGroup>
         </Select>
       </div>
@@ -56,5 +50,5 @@ function HomeV() {
     </>
   );
 }
-
+export { Search }
 export default HomeV;

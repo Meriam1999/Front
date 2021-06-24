@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
 import axios from 'axios';
 import {
-  Avatar,
   Button,
   CssBaseline,
-  Snackbar,
   TextField
 } from "@material-ui/core";
+import Footer from '../components/Footer/Footer';
+import GoogleLogin from 'react-google-login';
+import Sidebar from '../components/NavBar/SideBar2';
 import { useHistory } from "react-router-dom";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -21,7 +22,6 @@ import { AuthContext } from '../Context/AuthContext';
 import './style.css';
 import 'react-slideshow-image/dist/styles.css';
 import { Slide } from 'react-slideshow-image';
-
 
 // import { set } from "mongoose";
 
@@ -87,7 +87,7 @@ export default function SignInSide(props) {
   const [error, setError] = React.useState({ Email: "", Motdepasse1: "" });
   const [Email, setemail] = useState("");
   const [Motdepasse1, setMotdepasse1] = useState("");
-  const authContext=useContext(AuthContext);
+  const authContext = useContext(AuthContext);
   const history = useHistory();
 
   const valideConnex = () => {
@@ -103,15 +103,42 @@ export default function SignInSide(props) {
       Email: Email,
       Mot_de_passe: Motdepasse1
     }
-    axios.post(`http://localhost:4000/user/authentification`, data)
-      .then((res) => { console.log(res.data) 
-      localStorage.setItem('userId', res.data.userId);
-      localStorage.setItem('token', res.data.token);
-      const id=res.data.userId;
-      const token=res.data.token;
-       authContext.setAuth({id,token})
-      })
+    if (valideConnex()) {
+      axios.post(`http://localhost:4000/user/authentification`, data)
+        .then((res) => {
+          console.log(res.data)
+          localStorage.setItem('userId', res.data.userId);
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('nom', res.data.nom);
+          localStorage.setItem('role', res.data.role);
+          const id = res.data.userId;
+          const token = res.data.token;
+          const nom = res.data.nom;
+          const role = res.data.role;
+          authContext.setAuth({ id, token, nom, role })
+          openNotificationsucces('bottomRight', 'Bienvenue ');
+          if (role == "Expert") {
+            setTimeout(() => {
+              history.push('/expert/Accueil')
+            }, 2000)
+          } else if (role == "Administrateur") {
+            setTimeout(() => {
+              history.push('/admin/Accueil')
+            }, 2000)
+          }
+          else if (role == "Utilisateur") {
+            setTimeout(() => {
+              history.push('/')
+            }, 2000)
+          }
+        }).catch((error) => {
+          openNotificationerror('bottomRight', 'Veuillez verifier les données entrées!')
+          console.log(error.response);
+        });
 
+    } else {
+      openNotificationwarning('bottomRight', 'Veuillez Remplir les deux champs svp!');
+    }
   }
   const handleChange = (property, event) => {
     const accountCopy = {
@@ -149,87 +176,119 @@ export default function SignInSide(props) {
     //   setError(errorCopy);
   };
 
-  {/*Grid boostrap: 
-      une ligne est composer des 12 colonnes
-    faire pour les exran de taille xs 
-      pour les ecrans de taille sm, prendre 4 colonnes parmi 12 et afficher l'image gallery
-      et pour les ecran de taille medium kima l'ecran emte3eke prend 7 colonne pour afficher les images */}
+  const googleSuccess = async (res) => {
+    console.log(res)
+  }
+  const googleFailure = (error) => {
+    console.log(error)
+    console.log("google sign in was unsuccefful")
+  }
   return (
-    <Grid container component="main" className="containerr">
-      <CssBaseline />
-      <Grid item xs={false} sm={5} md={7}>
-        <Slide easing="ease">
-          <div className="each-slide">
-            <div style={{ 'backgroundImage': `url(${images[0]})` }}>
+    <>
+      <Sidebar />
+      <Grid container component="main" className="containerr">
+        <CssBaseline />
+        <Grid item xs={false} sm={5} md={7}>
+          <Slide easing="ease">
+            <div className="each-slide">
+              <div style={{ 'backgroundImage': `url(${images[0]})` }}>
+              </div>
             </div>
-          </div>
-          <div className="each-slide">
-            <div style={{ 'backgroundImage': `url(${images[1]})` }}>
+            <div className="each-slide">
+              <div style={{ 'backgroundImage': `url(${images[1]})` }}>
+              </div>
             </div>
-          </div>
 
-        </Slide>
-      </Grid>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={4} square>
-        <div className={classes.paper}>
-          <div className="Logo"><img style={{ width: "120px", height: "120px" }} src="../logo.png" /> </div>
-          <Typography component="h1" variant="h5" style={{ marginTop: "-20px" }}>
-            Connexion
-              </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              value={Email}
-              onChange={(event) => { setemail(event.target.value); handleChange("Email", event); }}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              error={error.Email}
-              helperText={error.Email}
-              id="Email"
-              label="Email"
-              name="Email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="Motdepasse1"
-              label="Mot de passe"
-              type="password"
-              id="Motdepasse1"
-              value={Motdepasse1}
-              onChange={(event) => { setMotdepasse1(event.target.value); handleChange("Motdepasse1", event) }}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Se souvenir de moi"
-            />
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleConnexion}
-            >
+          </Slide>
+        </Grid>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={4} square>
+          <div className={classes.paper}>
+            <div className="Logo"><img style={{ width: "120px", height: "120px" }} src="../logo.png" /> </div>
+            <Typography component="h1" variant="h5" style={{ marginTop: "-20px" }}>
               Connexion
-                </Button>
-            <Grid container>
-              <Grid item style={{ marginLeft: "-45px" }}>
-                <Link to="/inscription">{"Vous n'avez pas un Compte? Inscrivez-vous!"}</Link>
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid item style={{ marginLeft: "13px" }}>
-                <Link to="/">{"Retour  à la page d'accueil"}</Link>
-              </Grid>
-            </Grid>
+            </Typography>
+            <form className={classes.form} noValidate>
+              <TextField
+                value={Email}
+                onChange={(event) => { setemail(event.target.value); handleChange("Email", event); }}
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                error={error.Email}
+                helperText={error.Email}
+                id="Email"
+                label="Email"
+                name="Email"
+                autoFocus
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="Motdepasse1"
+                label="Mot de passe"
+                type="password"
+                id="Motdepasse1"
+                value={Motdepasse1}
+                onChange={(event) => { setMotdepasse1(event.target.value); handleChange("Motdepasse1", event) }}
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Se souvenir de moi"
+              />
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleConnexion}
+              >
+                Connexion
+              </Button>
+              <br />
 
-          </form>
-        </div>
-      </Grid>
-    </Grid >
+              <Grid container>
+                <Grid item style={{ marginLeft: "-45px" }}>
+                  <Link to="/inscription">{"Vous n'avez pas un Compte? Inscrivez-vous!"}</Link>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item style={{ marginLeft: "13px" }}>
+                  <Link to="/">{"Retour  à la page d'accueil"}</Link>
+                </Grid>
+              </Grid>
+
+            </form>
+            <GoogleLogin
+              cliendId="363683454329-2eda3nvnadm0vgpl2p98i9h1e73i0mj4.apps.googleusercontent.com"
+              render={renderProps => (
+                <Button className={classes.googleButton}
+                  color='primary'
+                  fullWidth
+                  onClick={renderProps.onClick}
+                  // disabled={renderProps.disabled}
+                  startIcon={<svg style={{ width: '20px', height: '20px' }}
+                    viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"
+                    />
+                  </svg>}
+                  variant="contained"
+                >
+                  connexion avec Google
+                </Button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy='single_host_origin'
+            />
+          </div>
+        </Grid>
+      </Grid >
+      <Footer />
+    </>
   );
 }

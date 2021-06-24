@@ -6,11 +6,11 @@ import axios from "axios";
 function aboutus() {
   return (
     <>
-    <Sidebar/>
-    <div >
+      <Sidebar />
+      <div >
         <h1> About Us*</h1>
-        <div> mariem eeemaruouma </div>
-    </div>
+
+      </div>
     </>
   );
 }

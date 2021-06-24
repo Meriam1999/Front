@@ -5,10 +5,13 @@ import Footer from '../components/Footer/Footer';
 import Sidebar from '../components/NavBar/SideBar2Expert';
 import TypeWriterEffect from 'react-typewriter-effect';
 import 'antd/dist/antd.css';
-import { Table, Input, Tag, Button, Space, notification, Popconfirm } from 'antd';
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, CheckCircleTwoTone, CloseCircleTwoTone, DeleteTwoTone } from '@ant-design/icons';
+
+import { Table, Space, Input, Button, Tag, notification } from 'antd';
+
 import axios from 'axios';
+import { Popconfirm } from 'antd';
 
 const openNotificationsucces = (placement, message) => {
   notification.success({
@@ -16,58 +19,54 @@ const openNotificationsucces = (placement, message) => {
     placement,
   });
 };
-export default class GAnnoncesProtection extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      searchText: '',
-      searchedColumn: '',
-      tableData: [{
-        _id: '',
-        Titre: '',
-        Description: '',
-        Gouvernorat: '',
-        Ville: '',
-        Etat1Anononce: [''],
-        Etat2Anononce: [''],
-        Prix: '',
-        Photo_annonce: '',
-        Date_Annonce: '',
-        Catégorie: [''],
-        TypeAnnonce: [''],
-        TypeNonmedicament: '',
-        Tags: '',
-        Image: ''
-      }]
-    };
+
+export default class NestedTable extends React.Component {
+  state = {
+    searchText: '',
+    searchedColumn: '',
+    tableData: [{
+      _id: '',
+      userId: '',
+      Titre: '',
+      Description: '',
+      Gouvernorat: '',
+      Ville: '',
+      Etat1Anononce: [''],
+      Etat2Anononce: [''],
+      Prix: '',
+      Photo_annonce: '',
+      Date_Annonce: '',
+      Catégorie: [''],
+      TypeAnnonce: [''],
+      TypeNonmedicament: [''],
+      Produit: '',
+      Tags: '',
+      Image: ['']
+    }]
   }
 
-
   /**************Affichage des Annonces Autres *********/
-
   componentDidMount() {
-    const Nm = {
-      TypeNonmedicament: "Protection"
+    // console.log(Nm);
+    const type = {
+      TypeNonmedicament: 'Protection'
     }
-    console.log(Nm);
-    axios.get('/nonMedicament/afficherNM', Nm)
+    console.log(type)
+    axios.get(`http://localhost:4000/nonMedicament/afficher`)
       .then(res => {
         this.setState({ tableData: res.data });
-        console.log("voila la liste des annonces");
         console.log(res.data)
       })
       .catch(function (error) {
-        console.log("je ne peux pas afficher la liste des annonces");
-        console.log(error);
         console.log(error.res);
       })
   }
-  /******************Suuprimer******* */
+  /****************Supprimer Annonce ************/
   SupprimerAnnonce(_id, e) {
     e.preventDefault();
     //  const deletedRow= this.state.tableData.filter(item => item._id == _id)
     //  this.setState({ deletedRow });
-    axios.delete(`/nonMedicament/supprimer/${_id}`)
+    axios.delete(`http://localhost:4000/nonMedicament/supprimer/${_id}`)
       .then(res => {
         openNotificationsucces('bottomRight', 'Annonce supprimée');
         console.log(res);
@@ -77,9 +76,58 @@ export default class GAnnoncesProtection extends React.Component {
       }).catch((error) => {
         console.log(error.response)
       });
-
   }
-  /**************REcherche************* */
+
+
+  /********************Rejeter Annonce *******8*/
+  RejeterAnnonce(_id, e, record) {
+    e.preventDefault();
+    const nonMedic = {
+      Etat1Anononce: ['Rejeté_Expert']
+    }
+    axios.put(`http://localhost:4000/nonMedicament/modifier/${_id}`, nonMedic)
+      .then(response => {
+        console.log(response)
+        window.location.reload();
+      }
+      ).catch(error => {
+        console.error('There was an error!', error);
+      });
+  }
+
+
+  /********************Rejeter Annonce *******8*/
+  ApprouverAnnonce(_id, e, record) {
+    e.preventDefault();
+    const nonMedic = {
+      Etat1Anononce: ['Validé_Expert']
+    }
+    axios.put(`http://localhost:4000/nonMedicament/modifier/${_id}`, nonMedic)
+      .then(response => {
+        console.log(response)
+        window.location.reload();
+      }
+      ).catch(error => {
+        console.error('There was an error!', error);
+      });
+  }
+  /*******Supprimer tous ********/
+
+  handleResetall() {
+    axios.delete('http://localhost:4000/nonMedicament/supprimer')
+      .then(res => {
+        openNotificationsucces('bottomRight', 'tous les Annonces sont supprimées');
+        console.log(res);
+        console.log(res.data);
+        this.setState({ tableData: res.data });
+        window.location.reload();
+      }).catch((error) => {
+        console.log(error.response)
+      });
+  }
+
+  /******************Partie Recherche************ */
+
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
@@ -159,121 +207,122 @@ export default class GAnnoncesProtection extends React.Component {
   };
 
 
+
+
   render() {
 
     const { tableData } = this.state;
 
-    const expandedRowRender = () => {
-      const columns1 = [
-        {
-          title: 'Gouvernorat',
-          dataIndex: 'Gouvernorat',
-          accessor: 'Gouvernorat',
-          key: 'Gouvernorat',
-          ...this.getColumnSearchProps('Gouvernorat'),
-        },
-
-        {
-          title: 'Ville',
-          accessor: 'Ville',
-          dataIndex: 'Ville',
-          key: 'Ville',
-          ...this.getColumnSearchProps('Ville'),
-        },
-
-        // {
-        //   title: 'Tags',
-        //   dataIndex: 'Tags',
-        //   accessor: 'tableData.Tags',
-        //   key: 'Tags',
-        //   ...this.getColumnSearchProps('Tags'),
-        // },
-        {
-          title: 'Prix',
-          dataIndex: 'Prix',
-          accessor: 'Prix',
-          key: 'Prix',
-          ...this.getColumnSearchProps('Prix'),
-        },
-        // {
-        //   title: 'Images',
-        //   dataIndex: 'Images',
-        //   accessor: 'tableData.Images',
-        //   key: 'Images',
-        //   ...this.getColumnSearchProps('Images'),
-        // },
-        {
-          title: 'Type',
-          dataIndex: 'Type_annonce',
-          accessor: 'TypeNonmedicament',
-          key: 'Type_annonce',
-          ...this.getColumnSearchProps('Type_annonce'),
-          //      render:Type_annonce => (
-          //   <>
-          //     {Type_annonce.map(Etat => {
-          //       let color="blue";
-          //       if (Etat === "Annonce d'offre gratuit /Vente(Prix Symbolique)" ){
-          //         color = 'green';
-          //       }else {
-          //           color ='lime'
-          //         }
-          //       return (
-          //         <Tag color={color} key={Etat}>
-          //           {Etat.toUpperCase()}
-          //         </Tag>
-          //       );
-          //     })}
-          //   </>
-          // ),
-        },
-        // {
-        //   title: 'Photo',
-        //   dataIndex: 'Photo_annonce',
-        //   accessor: 'tableData.Photo_annonce',
-        //   key: 'Photo_annonce',
-        //   ...this.getColumnSearchProps('Photo_annonce'),
-        // },
-
-      ];
-      return <Table columns={columns1} dataSource={tableData} pagination={false} />;
-    };
-    const columns2 = [
+    const columns = [
       {
         title: 'Titre',
         dataIndex: 'Titre',
         accessor: 'Titre',
+        width: 120,
         key: 'Titre',
         ...this.getColumnSearchProps('Titre'),
+        fixed: 'left',
       },
-
-      // { title: 'Description',
-      //  dataIndex: 'Produit',
-      //  accessor:'tableData.Produit',
-      //   key: 'Produit' ,
-      //    ...this.getColumnSearchProps('Produit'),
-      // },
 
       {
         title: 'Description',
         dataIndex: 'Description',
+        width: 250,
         accessor: 'Description',
         key: 'Description',
         ...this.getColumnSearchProps('Description'),
       },
 
-
-
       {
         title: 'Date Annonce',
         accessor: 'Date_Annonce',
+        width: 100,
         dataIndex: 'Date_Annonce',
         key: 'Date_Annonce',
         ...this.getColumnSearchProps('Date_Annonce'),
       },
       {
+        title: 'Gouvernorat',
+        dataIndex: 'Gouvernorat',
+        width: 120,
+        accessor: 'Gouvernorat',
+        key: 'Gouvernorat',
+        ...this.getColumnSearchProps('Gouvernorat'),
+      },
+
+      {
+        title: 'Ville',
+        accessor: 'Ville',
+        dataIndex: 'Ville',
+        key: 'Ville',
+        ...this.getColumnSearchProps('Ville'),
+      },
+
+      // {
+      //   title: 'Tags',
+      //   dataIndex: 'Tags',
+      //   accessor: 'tableData.Tags',
+      //   key: 'Tags',
+      //   ...this.getColumnSearchProps('Tags'),
+      // },
+      {
+        title: 'Prix',
+        dataIndex: 'Prix',
+        accessor: 'Prix',
+        key: 'Prix',
+        ...this.getColumnSearchProps('Prix'),
+      },
+      {
+        title: 'Type Annonce',
+        dataIndex: 'TypeAnnonce',
+        width: 250,
+        accessor: 'TypeAnnonce',
+        key: 'TypeAnnonce',
+        ...this.getColumnSearchProps('TypeAnnonce'),
+      },
+      // {
+      //   title: 'Images',
+      //   dataIndex: 'Images',
+      //   accessor: 'tableData.Images',
+      //   key: 'Images',
+      //   ...this.getColumnSearchProps('Images'),
+      // },
+      // {
+      //     title: 'Catégorie',
+      //     dataIndex: 'TypeNonmedicament',
+      //     accessor: 'TypeNonmedicament',
+      //     key: 'TypeNonmedicament',
+      //     ...this.getColumnSearchProps('TypeNonmedicament'),
+      //      render:Type_annonce => (
+      //   <>
+      //     {Type_annonce.map(Etat => {
+      //       let color="blue";
+      //       if (Etat === "Annonce d'offre gratuit /Vente(Prix Symbolique)" ){
+      //         color = 'green';
+      //       }else {
+      //           color ='lime'
+      //         }
+      //       return (
+      //         <Tag color={color} key={Etat}>
+      //           {Etat.toUpperCase()}
+      //         </Tag>
+      //       );
+      //     })}
+      //   </>
+      // ),
+      // },
+      // {
+      //   title: 'Photo',
+      //   dataIndex: 'Photo_annonce',
+      //   accessor: 'tableData.Photo_annonce',
+      //   key: 'Photo_annonce',
+      //   ...this.getColumnSearchProps('Photo_annonce'),
+      // },
+      {
         title: 'Etat1',
         dataIndex: 'Etat1Anononce',
         accessor: 'Etat1Anononce',
+        width: 140,
         key: 'Etat1Anononce',
         ...this.getColumnSearchProps('Etat1Anononce'),
         render: Etat1Anononce => (
@@ -326,15 +375,16 @@ export default class GAnnoncesProtection extends React.Component {
 
       {
         title: 'Action',
+        fixed: 'right',
         key: 'operation',
         render: (record) =>
           this.state.tableData.length >= 1 ? (
             <>
               <ul>
-                <Popconfirm title="Publier Cette Annonce?" >
+                <Popconfirm title="Publier Cette Annonce?" onConfirm={(e) => this.ApprouverAnnonce(record._id, e, record)} >
                   <li> <a>Publier</a></li>
                 </Popconfirm>
-                <Popconfirm title="Rejeter cette Annonce?"  >
+                <Popconfirm title="Rejeter cette Annonce?" onConfirm={(e) => this.RejeterAnnonce(record._id, e, record)} >
                   <li> <a>Rejeter</a></li>
                 </Popconfirm>
                 <Popconfirm title="Supprimer Cette Annonce?" onConfirm={(e) => this.SupprimerAnnonce(record._id, e)} >
@@ -346,6 +396,7 @@ export default class GAnnoncesProtection extends React.Component {
       },
     ];
 
+
     return (
       <>
         <Sidebar />
@@ -354,16 +405,15 @@ export default class GAnnoncesProtection extends React.Component {
             textStyle={{ fontFamily: "sans-serif", textAlign: "center", fontWeight: "bold", marginTop: "25px" }}
             startDelay={100}
             cursorColor="black"
-            text="Gestion Des Annonces de Protection"
+            text="Gestion Des annonces Protection"
             typeSpeed={100}
           />
           <Popconfirm title="Publier Cette Annonce?" onConfirm={this.handleResetall}>
             <Button style={{ marginLeft: "1100px", marginBottom: "20px" }}>Supprimer tous</Button>
           </Popconfirm>
           <Table
-            className="components-table-demo-nested"
-            columns={columns2}
-            expandable={{ expandedRowRender }}
+            scroll={{ x: 1500, y: 500 }}
+            columns={columns}
             dataSource={tableData}
           />
         </div>
@@ -372,4 +422,3 @@ export default class GAnnoncesProtection extends React.Component {
     );
   }
 }
-

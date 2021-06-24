@@ -7,7 +7,7 @@ function Footer() {
   return (
     <div className='footer-container'>
       <section className='footer-subscription'>
-        
+
       </section>
       <div class='footer-links'>
         <div className='footer-link-wrapper'>
@@ -41,8 +41,8 @@ function Footer() {
               VmedicTn
             </Link>
           </div>
-         
-          <div class='social-icons'>
+
+          {/* <div class='social-icons'>
             <Link
               class='social-icon-link facebook'
               to='/'
@@ -83,7 +83,7 @@ function Footer() {
             >
               <i class='fab fa-linkedin' />
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

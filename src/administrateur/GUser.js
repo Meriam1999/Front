@@ -43,7 +43,7 @@ export default class Guser extends React.Component {
   }
   /*****************Recuperation des utilisateurs de la base de donnees**********/
   componentDidMount() {
-    axios.get('http://localhost:4000/user/afficher')
+    axios.get(`http://localhost:4000/user/afficher`)
       .then(res => {
         this.setState({ tableData: res.data });
         console.log(res.data)
@@ -61,7 +61,7 @@ export default class Guser extends React.Component {
     e.preventDefault();
     //  const deletedRow= this.state.tableData.filter(item => item._id == _id)
     //  this.setState({ deletedRow });
-    axios.delete(`/user/supprimer/${_id}`)
+    axios.delete(`http://localhost:4000/user/supprimer/${_id}`)
       .then(res => {
         openNotificationsucces('bottomRight', 'Utilisateur supprimé');
         console.log(res);
@@ -79,7 +79,7 @@ export default class Guser extends React.Component {
   AddExpert = (_id, record, e) => {
     e.preventDefault();
     const NExpert = record
-    axios.delete(`/user/supprimer/${_id}`)
+    axios.delete(`http://localhost:4000/user/supprimer/${_id}`)
       .then(res => {
         openNotificationsucces('bottomRight', 'expert Ajouté');
         console.log(res);
@@ -91,7 +91,6 @@ export default class Guser extends React.Component {
       });
 
     const NExpert1 = {
-
       dateInscription: NExpert.dateInscription,
       Nom: NExpert.Nom,
       Prenom: NExpert.Prenom,
@@ -104,7 +103,7 @@ export default class Guser extends React.Component {
       job: 'Pharmacien(ne)',
       Numero_telephone: NExpert.Numero_telephone,
     };
-    axios.post('/expert/ajouter', NExpert1)
+    axios.post(`http://localhost:4000/expert/ajouter`, NExpert1)
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -118,7 +117,7 @@ export default class Guser extends React.Component {
   AddAdmin = (_id, record, e) => {
     e.preventDefault();
     const User = record
-    axios.delete(`/user/supprimer/${_id}`)
+    axios.delete(`http://localhost:4000/user/supprimer/${_id}`)
       .then(res => {
         openNotificationsucces('bottomRight', 'Admin Ajouté');
         console.log(res);
@@ -142,7 +141,7 @@ export default class Guser extends React.Component {
       etat: 'Administrateur',
       Numero_telephone: User.Numero_telephone,
     };
-    axios.post('/admin/ajouter', NAdmin)
+    axios.post(`http://localhost:4000/admin/ajouter`, NAdmin)
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -367,7 +366,7 @@ export default class Guser extends React.Component {
         ...this.getColumnSearchProps(' Photo_profile'),
         render: (record) => (
           <>
-            <Image src="https://source.unsplash.com/random" alt="" style={{ width: "80px", height: "80px", borderRadius: "50%" }} />
+            <Image src='/assets/images/anonyme.jpg' alt="" style={{ width: "80px", height: "80px", borderRadius: "50%" }} />
           </>
         )
       },
@@ -387,8 +386,9 @@ export default class Guser extends React.Component {
                 </Popconfirm><br />
 
 
-                <Popconfirm title="êtes-vous sûr de vouloir rendre Cet Utilisateur un Expert?" onConfirm={(e) => this.AddAdmin(record._id, record, e)} >
-                  <li> <a>Rendre Admin</a></li>
+                <Popconfirm title="êtes-vous sûr de vouloir bloquer Cet Utilisateur?" >
+                  {/* onConfirm={(e) => this.AddAdmin(record._id, record, e)} > */}
+                  <li> <a>bloquer</a></li>
                 </Popconfirm>
               </ul>
             </>

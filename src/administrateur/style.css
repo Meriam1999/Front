@@ -17,3 +17,7 @@
 .ant-image-mask{
     border-radius: 50%;
 }
+
+.ant-pagination.ant-table-pagination.ant-table-pagination-right{
+    margin-right: 500px;
+}
