@@ -131,10 +131,23 @@ export default function Annonce() {
     });
   };
 
-  const handleChange = ({ fileList }) => {
+  
+
+  const handleChange = ({fileList}) => {
+    Images(fileList)
     setState({ fileList });
-    console.log(state.fileList)
+    console.log('images ::::',state.fileList)
   };
+
+  const [img, setImg]=useState([])
+  const Images =(fileList) => {
+   
+    
+      console.log('ii : ', fileList[0].thumbUrl)
+      setImg ([{ imageUrl: fileList[0].thumbUrl }])
+    
+    console.log('images url :',img)
+  }
 
   const uploadButton = (
     <div>
@@ -163,8 +176,11 @@ export default function Annonce() {
         formData.append('TypeAnnonce', "Annonce d'offre gratuit /Vente(Prix Symbolique)")
         formData.append('Catégorie', 'NonMedicament')
         formData.append('TypeNonmedicament', categorie)
-        for (let i = 0; i < state.fileList.length; i++) {
-          formData.append('images', state.fileList[i].originFileObj)
+        for (let i = 0; i < state.fileList.length; i++)
+        {
+          console.log('ii : ', state.fileList[i].thumbUrl)
+          const url = state.fileList[i].thumbUrl;
+          formData.append('images[]',state.fileList[i].thumbUrl)
         }
         //  console.log(state.fileList[0])
         for (var key of formData.entries()) {
@@ -507,7 +523,7 @@ export default function Annonce() {
                   >
                     {state.fileList.length >= 3 ? null : uploadButton}
                   </Upload>
-
+                 
                   <Modal
                     visible={state.previewVisible}
                     footer={null}
