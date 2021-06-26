@@ -134,20 +134,13 @@ export default function Annonce() {
   
 
   const handleChange = ({fileList}) => {
-    Images(fileList)
+  
     setState({ fileList });
     console.log('images ::::',state.fileList)
   };
 
   const [img, setImg]=useState([])
-  const Images =(fileList) => {
-   
-    
-      console.log('ii : ', fileList[0].thumbUrl)
-      setImg ([{ imageUrl: fileList[0].thumbUrl }])
-    
-    console.log('images url :',img)
-  }
+
 
   const uploadButton = (
     <div>
@@ -162,36 +155,46 @@ export default function Annonce() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(validAnnonce())
+    for (let i = 0; i < state.fileList.length; i++)
+    {
+      let url = state.fileList[i].thumbUrl;
+      
+          console.log('ii : ', state.fileList[i].thumbUrl)
+      img.push(url)
+      
+         // formData.append('images',state.fileList[i].thumbUrl)
+    }
+    
+    const dataA = {
+      
+        userId : authContext.auth.id,
+        userName : authContext.auth.nom,
+        Titre : titre,
+        Description :Description,
+        Gouvernorat :Gouvernorat,
+        ville : Ville,
+        Prix :prix,
+        TypeAnnonce :"Annonce d'offre gratuit /Vente(Prix Symbolique)",
+        Catégorie : 'NonMedicament',
+        TypeNonmedicament :categorie,
+        images :img
+        
+    }
 
     if (validAnnonce()) {
       if (categorie === 'mobilier medicale' || categorie === 'Soin et Pansement' || categorie === 'Protection' || categorie === 'Autre') {
-        const formData = new FormData();
-        formData.append('userId', authContext.auth.id)
-        formData.append('userName', authContext.auth.nom)
-        formData.append('Titre', titre)
-        formData.append('Description', Description)
-        formData.append('Gouvernorat', Gouvernorat)
-        formData.append('ville', Ville)
-        formData.append('Prix', prix)
-        formData.append('TypeAnnonce', "Annonce d'offre gratuit /Vente(Prix Symbolique)")
-        formData.append('Catégorie', 'NonMedicament')
-        formData.append('TypeNonmedicament', categorie)
-        for (let i = 0; i < state.fileList.length; i++)
-        {
-          console.log('ii : ', state.fileList[i].thumbUrl)
-          const url = state.fileList[i].thumbUrl;
-          formData.append('images[]',state.fileList[i].thumbUrl)
-        }
+       
         //  console.log(state.fileList[0])
-        for (var key of formData.entries()) {
-          console.log(key[0] + ', ' + key[1]);
-        }
+        
         const config = {
           "headers": {
-            "content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
+            "content-type": 'application/json'
           }
         }
-        axios.post(`http://localhost:4000/nonMedicament/ajouter`, formData, config)
+        console.log('imagessss: ', img)
+        axios.post(`http://localhost:4000/nonMedicament/ajouter`, 
+          dataA
+        , config)
           .then((res) => {
             openNotificationsucces('bottomRight', "Votre Annonce est envoyée et est en attente d'approbation par un administrateur")
             console.log("NonMedicament Ajoutee")
